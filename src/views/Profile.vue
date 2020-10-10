@@ -21,9 +21,7 @@
 					class="d-flex justify-center align-center"
 					style="font-family:Montserrat; font-size:15px; "
 				>
-					<v-text style="margin-right:55px"
-						><h2>John Smith</h2></v-text
-					>
+					<v-text style="margin-right:55px"><h2>John Doe</h2></v-text>
 					<v-btn style="margin:5px"> Your Recipes</v-btn>
 					<v-btn style="margin:5px"> Favorite Recipes</v-btn>
 					<v-btn style="margin:5px"> Your PPM</v-btn>
