@@ -1,7 +1,7 @@
 <template>
 	<v-col sm="12" md="6" class="d-flex align-content-center justify-center">
 		<v-card color="transparent" flat max-width="400px">
-			<div class="title">
+			<div class="title text-center">
 				<div style="font-family:Tangerine; font-size:75px">
 					Join to Us
 				</div>

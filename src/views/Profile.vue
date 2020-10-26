@@ -11,11 +11,9 @@
 			class="d-flex row text--secondary px-15 py-4 text-center justify-center headline text-uppercase"
 			style="line-height: 30px; "
 		>
-			<div class="col-12 col-sm-6 d-flex justify-center align-center">
-				<v-img
-					src="https://cdn.vuetifyjs.com/images/profiles/marcus.jpg"
-				></v-img>
-			</div>
+			<!-- <div class="col-12 col-sm-6 d-flex justify-center align-center">
+				<v-avatar color="primary" size="56"> JD </v-avatar>
+			</div> -->
 			<div class="col-12 col-sm-6 d-flex ">
 				<div
 					class="d-flex justify-center align-center"

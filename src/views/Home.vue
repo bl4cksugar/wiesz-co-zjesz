@@ -53,103 +53,33 @@
 				</div>
 			</div>
 		</div>
-
-		<div d-flex class="recipe">
-			<span style="font-family:Tangerine; font-size:75px; ">
-				Recipe
-			</span>
-			<br />
-			<span
-				class="text--secondary text-uppercase"
-				style="font-family:Montserrat; font-size:15px; "
-			>
-				Find your favorite
-			</span>
-
-			<v-text-field
-				d-flex
-				v-model="recipe"
-				prepend-inner-icon="mdi-magnify"
-				flat
-				hide-details
-				label="Search"
-				outlined
-			></v-text-field>
-
-			<div class=" d-flex justify-center col-12 ">
-				<v-col class="d-flex justify-center align-center"
-					><v-btn outlined large fab color="indigo">
-						<v-icon>mdi-arrow-left</v-icon>
-					</v-btn>
-				</v-col>
-				<v-col sm="6">
-					<v-row>
-						<v-col
-							v-for="n in 9"
-							:key="n"
-							class="d-flex child-flex"
-							cols="4"
-						>
-							<v-img
-								:src="
-									`https://picsum.photos/500/300?image=${n *
-										5 +
-										10}`
-								"
-								:lazy-src="
-									`https://picsum.photos/10/6?image=${n * 5 +
-										10}`
-								"
-								aspect-ratio="1"
-								class="grey lighten-2"
-							>
-								<template v-slot:placeholder>
-									<v-row
-										class="fill-height ma-0"
-										align="center"
-										justify="center"
-									>
-										<v-progress-circular
-											indeterminate
-											color="grey lighten-5"
-										></v-progress-circular>
-									</v-row>
-								</template>
-							</v-img>
-						</v-col>
-					</v-row>
-				</v-col>
-				<v-col class="d-flex justify-center align-center">
-					<v-btn class="ma-2" outlined large fab color="indigo">
-						<v-icon>mdi-arrow-right</v-icon>
-					</v-btn>
-				</v-col>
-			</div>
-		</div>
+		<recipes-list></recipes-list>
 	</div>
 </template>
 
 <script>
-import registration from "../components/registration";
+import registration from "../components/registration.vue";
+import RecipesList from "../components/Recipes/RecipesList.vue";
 
 export default {
 	name: "Home",
-	data() {
-		return {};
-	},
+	data: () => ({
+		includeFiles: true,
+		enabled: false
+	}),
 	components: {
-		registration
+		registration,
+		RecipesList
 	}
 };
 </script>
 
 <style>
-.v-input__slot {
-	width: 30%;
-	min-width: 300px;
-	align-self: center;
-	margin-top: 20px;
+.row {
+	align-content: center;
+	justify-content: center;
 }
+
 .box {
 	width: 100vw;
 	height: 100vh;
