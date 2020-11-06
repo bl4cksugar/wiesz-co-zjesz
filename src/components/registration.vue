@@ -1,8 +1,15 @@
 <template>
-	<v-col sm="12" md="6" class="d-flex align-content-center justify-center">
-		<v-card color="transparent" flat max-width="400px">
-			<div class="title text-center">
-				<div style="font-family:Tangerine; font-size:75px">
+	<v-col
+		sm="12"
+		md="6"
+		lg="4"
+		class="d-flex align-content-center justify-center"
+	>
+		<v-card flat class="col-12" style="background: rgba(255,255,255,0.8)">
+			<div class="title text-center pt-4">
+				<div
+					style="font-family:Tangerine; font-size:75px; color: #2c3e50"
+				>
 					Join to Us
 				</div>
 				<v-alert v-if="alert" :type="alert.type">{{
@@ -10,13 +17,14 @@
 				}}</v-alert>
 			</div>
 			<v-form ref="form" v-model="valid" lazy-validation>
-				<v-card-text>
+				<v-card-text class="col-12">
 					<v-text-field
+						style="font-size:12px"
 						background-color="rgba(255, 255, 255, 0.9)"
 						color="grey"
 						outlined
 						v-model="email"
-						label="e-mail"
+						label="E-mail"
 						:rules="[rules.required, rules.email]"
 					></v-text-field>
 
@@ -30,7 +38,7 @@
 						"
 						:rules="[rules.required, rules.min]"
 						:type="showPassword ? 'text' : 'password'"
-						label="password"
+						label="Password"
 						prepend-inner-icon="fas fa-key"
 						@click:append="showPassword = !showPassword"
 					></v-text-field>
@@ -42,7 +50,7 @@
 						v-model="repeatPassword"
 						:rules="[rules.required, rules.min]"
 						:type="showPassword ? 'text' : 'password'"
-						label="repeat password"
+						label="Repeat password"
 						prepend-inner-icon="fas fa-key"
 						@keyup.enter="submit"
 					></v-text-field>
@@ -59,8 +67,9 @@
 </template>
 <script>
 import axios from "axios";
+import validation from "../mixins/validation";
 export default {
-	name: "registration",
+	mixins: [validation],
 	data() {
 		return {
 			showPassword: false,
@@ -69,17 +78,7 @@ export default {
 			surname: "",
 			email: "",
 			valid: null,
-			alert: null,
-			rules: {
-				required: (value) => !!value || "Required.",
-				min: (v) => v.length >= 8 || "Min 8 characters",
-				emailMatch: () =>
-					"The email and password you entered don't match",
-				email: (value) => {
-					const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-					return pattern.test(value) || "Invalid e-mail.";
-				}
-			}
+			alert: null
 		};
 	},
 	components: {},
@@ -138,4 +137,5 @@ export default {
 	}
 };
 </script>
+
 <style scoped></style>

@@ -12,7 +12,7 @@
 	</v-app>
 </template>
 <script>
-import NavBar from "./components/navbar";
+import NavBar from "./components/NavBar";
 import BFooter from "./components/footer";
 
 export default {

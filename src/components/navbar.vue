@@ -1,119 +1,146 @@
 <template>
-	<v-app-bar fixed scroll-off-screen style="background:rgb(2,68,66)">
-		<v-toolbar-title>
-			<div class="d-flex flex-wrap">
-				<router-link to="/" tag="a" style=" text-decoration: none;">
-					<span
-						style="color:white;font-family:Tangerine;font-size:40px; Weight:Light "
-						>Wiesz co Zjesz</span
+	<div>
+		<v-app-bar fixed scroll-off-screen class="app-bar">
+			<v-toolbar-title>
+				<div class="d-flex flex-wrap">
+					<router-link to="/" tag="a" class="logo-text">
+						Wiesz co Zjesz
+					</router-link>
+				</div>
+			</v-toolbar-title>
+			<v-spacer></v-spacer>
+			<div v-for="item in filtredMenuItems" :key="item.name">
+				<div v-if="!isSmallScreen">
+					<v-btn
+						v-if="item.isRouterLink"
+						text
+						color="white"
+						router-link
+						:to="item.route"
 					>
-				</router-link>
-			</div>
-		</v-toolbar-title>
-		<v-spacer></v-spacer>
-
-		<v-btn text color="white"> Home </v-btn>
-		<v-btn text color="white"> About us </v-btn>
-		<v-btn text color="white"> Recipes </v-btn>
-		<v-btn text color="white"> Profile </v-btn>
-
-		<v-col sm="2" justify-self="center" align-self="center">
-			<v-dialog v-model="dialog" max-width="450px">
-				<template v-slot:activator="{ on }">
-					<v-btn v-on="on" outlined color="white">
-						<span>SIGN IN</span>
+						{{ item.name }}
 					</v-btn>
-				</template>
-
-				<v-container
-					style="background:rgba(255,255,255,0.75)"
-					class="d-flex align-center justify-center py-8 "
-				>
-					<v-form ref="form" v-model="valid" lazy-validation>
-						<v-alert v-if="alert" :type="alert.type">{{
-							alert.content
-						}}</v-alert>
-						<div class="title">
-							<div
-								class=" mb-2 text-center"
-								style="color:black; font-family:Tangerine !important; font-size:50px;"
-							>
-								Welcome
-							</div>
-						</div>
-						<v-text-field
-							style="margin:10px"
-							background-color="white"
-							solo
-							v-model="email"
-							label="email"
-							prepend-inner-icon="fas fa-user-circle"
-							:rules="[rules.required, rules.email]"
-						></v-text-field>
-
-						<v-text-field
-							style="margin:10px"
-							background-color="white"
-							solo
-							v-model="password"
-							label="password"
-							type="password"
-							prepend-inner-icon="fas fa-key"
-							@click:append="show1 = !show1"
-							:rules="[rules.required]"
-						></v-text-field>
-
-						<v-btn style="margin:10px">
-							<span>SIGN IN</span>
-						</v-btn>
-					</v-form>
-				</v-container>
-			</v-dialog>
-		</v-col>
-		<!-- <v-col v-if="isLogged" sm="2" justify-self="center" align-self="center">
-			<v-btn depressed text icon>
-				<v-badge
-					:content="messages"
-					:value="messages"
-					color="green"
-					overlap
-				>
-					<v-icon>fas fa-bell</v-icon>
-				</v-badge>
+					<v-btn
+						v-else
+						text
+						@click="scrollTo(item.route)"
+						color="white"
+					>
+						{{ item.name }}
+					</v-btn>
+				</div>
+			</div>
+			<login-form v-if="!isLogged"></login-form>
+			<v-btn v-else color="red" @click="logout()">
+				<span>SIGN OUT</span>
 			</v-btn>
-		</v-col> -->
-	</v-app-bar>
+			<v-app-bar-nav-icon
+				v-if="isSmallScreen"
+				dark
+				@click="isToggled = true"
+			></v-app-bar-nav-icon>
+		</v-app-bar>
+		<v-navigation-drawer
+			v-model="isToggled"
+			temporary
+			right
+			fixed
+			class="app-drawer"
+		>
+			<v-list nav dense>
+				<v-list-item-group
+					v-model="group"
+					active-class="deep-purple--text text--accent-4"
+				>
+					<v-list-item
+						v-for="item in filtredMenuItems"
+						:key="item.name"
+						@click="goTo(item)"
+					>
+						<v-list-item-icon>
+							<v-icon>mdi-{{ item.icon }}</v-icon>
+						</v-list-item-icon>
+						<v-list-item-title>
+							{{ item.name.toUpperCase() }}
+						</v-list-item-title>
+					</v-list-item>
+				</v-list-item-group>
+			</v-list>
+		</v-navigation-drawer>
+	</div>
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import mediaQuery from "../mixins/mediaQuery";
+import LoginForm from "./LoginForm.vue";
 
 export default {
-	name: "navbar",
+	mixins: [mediaQuery],
 	data() {
 		return {
-			messages: 0,
-			show: false,
-			email: null,
-			password: null,
-			alert: null,
-			valid: null,
-			dialog: false,
-			rules: {
-				required: (value) => !!value || "Required.",
-				email: (value) => {
-					const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-					return pattern.test(value) || "Invalid e-mail.";
+			isToggled: false,
+			group: null,
+			menuItems: [
+				{
+					name: "Home",
+					isRouterLink: true,
+					route: "/",
+					icon: "home",
+					auth: false
+				},
+				{
+					name: "About Us",
+					isRouterLink: false,
+					route: "about-us",
+					icon: "information",
+					auth: false
+				},
+				{
+					name: "Recipes",
+					isRouterLink: false,
+					route: "recipes",
+					icon: "silverware-fork-knife",
+					auth: false
+				},
+				{
+					name: "Profile",
+					isRouterLink: true,
+					route: "/profile",
+					icon: "account",
+					auth: true
 				}
-			}
+			]
 		};
 	},
-	components: {}
-	// computed: {
-	// 	...mapGetters({
-	// 		isLogged: "user"
-	// 	})
-	// },
+	components: {
+		LoginForm
+	},
+	methods: {
+		...mapActions(["destroySession"]),
+		scrollTo(id) {
+			document.getElementById(id).scrollIntoView({
+				behavior: "smooth"
+			});
+		},
+		goTo(item) {
+			if (item.isRouterLink) {
+				this.$router.push({ path: item.route });
+				this.scrollTo("app");
+			} else this.scrollTo(item.route);
+		},
+		logout() {
+			this.destroySession();
+		}
+	},
+	computed: {
+		...mapGetters(["isLogged"]),
+		filtredMenuItems() {
+			return this.menuItems.filter(
+				(item) => !item.auth || (item.auth && this.isLogged)
+			);
+		}
+	}
 	// async mounted() {
 	// 	if (this.$route.meta.requiresAuth === true) {
 	// 		let result = await axios.get("auth/pivot/get");
@@ -239,7 +266,29 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+.app-drawer {
+	div {
+		font-weight: bold;
+	}
+	a {
+		color: black !important;
+		font-weight: bold;
+		&:link {
+			color: black;
+		}
+		text-decoration: none;
+	}
+}
+.app-bar {
+	background: rgb(2, 68, 66) !important;
+	.logo-text {
+		text-decoration: none;
+		color: white;
+		font-family: Tangerine;
+		font-size: 40px;
+	}
+}
 .headline a {
 	text-decoration: none;
 	color: black;

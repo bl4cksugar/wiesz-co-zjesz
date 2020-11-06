@@ -9,10 +9,8 @@
 		<div class="col-12 col-md-6">
 			<v-text-field
 				v-model="searchQuery"
-				class="mb-5"
 				prepend-inner-icon="mdi-magnify"
 				flat
-				hide-details
 				label="Search"
 				outlined
 			></v-text-field>
@@ -20,11 +18,10 @@
 				<div class="col-12 col-md-6 py-0 px-0 pr-md-2">
 					<v-text-field
 						v-model="calories"
-						class="mb-5"
 						prepend-inner-icon="mdi-calculator"
 						flat
+						:rules="[rules.number]"
 						type="number"
-						hide-details
 						min="0"
 						suffix="kcal"
 						label="Max calories"
@@ -34,11 +31,10 @@
 				<div class="col-12 col-md-6 py-0 px-0 pl-md-2">
 					<v-text-field
 						v-model="time"
-						class="mb-5"
 						prepend-inner-icon="mdi-clock-time-eight"
 						flat
+						:rules="[rules.number]"
 						type="number"
-						hide-details
 						min="0"
 						suffix="minutes"
 						label="Preparing Time"
@@ -100,6 +96,7 @@
 	</div>
 </template>
 <script>
+import validation from "../../mixins/validation";
 export default {
 	data() {
 		return {
@@ -117,6 +114,7 @@ export default {
 			pickedIngridients: []
 		};
 	},
+	mixins: [validation],
 	methods: {
 		remove(item) {
 			console.log("test", item);

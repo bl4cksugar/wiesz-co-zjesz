@@ -1,0 +1,111 @@
+<template>
+	<div class="d-flex flex-column align-center justify-center">
+		<span
+			class="text--secondary text-uppercase"
+			style="font-family:Montserrat; font-size:15px; "
+		>
+			my basic metabolism:
+			<!-- {{ ppm }} -->
+		</span>
+		<v-dialog v-model="dialog" persistent max-width="600px">
+			<template v-slot:activator="{ on, attrs }">
+				<v-btn rounded large v-bind="attrs" v-on="on">
+					<v-icon>mdi-calculator</v-icon> CALCULATE
+				</v-btn>
+			</template>
+			<v-card>
+				<v-card-title>
+					<span class="headline">Basic Metabolism</span>
+				</v-card-title>
+				<v-card-text>
+					<v-container>
+						<v-row>
+							<v-col cols="12">
+								<h2>Wybierz płeć</h2>
+								<v-radio-group v-model="radioGroup">
+									<v-radio
+										v-for="gender in genders"
+										:key="gender"
+										:label="`${gender}`"
+										:value="gender"
+									></v-radio>
+								</v-radio-group>
+							</v-col>
+							<v-col cols="12" sm="6" md="2">
+								<v-text-field
+									label="Wiek"
+									type="number"
+									min="1"
+									v-model="age"
+									required
+								></v-text-field>
+							</v-col>
+
+							<v-col cols="12" sm="6" md="6">
+								<v-text-field
+									type="number"
+									min="1"
+									label="Wzrost"
+									v-model="height"
+									required
+								></v-text-field>
+							</v-col>
+							<v-col cols="12" sm="6" md="4">
+								<v-text-field
+									type="number"
+									min="1"
+									label="Waga"
+									v-model="weight"
+									required
+								></v-text-field>
+							</v-col>
+							<!-- <v-col cols="12">
+								<v-select
+									:items="['0-17', '18-29', '30-54', '54+']"
+									label="Wskaźnik aktywności fizycznej"
+									required
+								></v-select>
+							</v-col> -->
+						</v-row>
+					</v-container>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn color="blue darken-1" text @click="dialog = false">
+						Close
+					</v-btn>
+					<v-btn color="blue darken-1" text @click="dialog = false">
+						Save
+					</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
+
+		<span class="text--secondary ">
+			*the minimal amount of energy necessary to maintain respiration,
+			circulation, and other vital body functions while fasting and at
+			total rest.
+		</span>
+	</div>
+</template>
+
+//
+<script>
+export default {
+	data() {
+		return {
+			ppm: "",
+			radioGroup: 1,
+			age: 0,
+			dialog: false,
+			genders: ["male", "female"]
+		};
+	},
+	methods: {
+		calculate(item) {
+			console.log("test", item);
+		}
+	}
+};
+</script>
+<style scoped></style>

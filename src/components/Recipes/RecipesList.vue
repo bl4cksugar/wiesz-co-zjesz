@@ -1,11 +1,13 @@
 <template>
 	<div
+		id="recipes"
 		d-flex
 		class="recipe col-12 text-center d-flex flex-column justify-center align-center"
 	>
-		<span style="font-family:Tangerine; font-size:75px; ">
+		<span style="font-family:Merriweather; font-size:60px; ">
 			Recipe
 		</span>
+
 		<search @dispatchFindRecipe="findRecipe"></search>
 
 		<div class="col-12 col-md-8 d-flex row">
@@ -19,11 +21,11 @@
 		</div>
 		<div class="col-12 d-flex align-center justify-center ">
 			<v-btn class="ma-2" rounded large>
-				<v-icon>mdi-arrow-left</v-icon> COFNIJ
+				<v-icon>mdi-arrow-left</v-icon> BACK
 			</v-btn>
 
 			<v-btn class="ma-2 " rounded large>
-				DALEJ <v-icon>mdi-arrow-right</v-icon>
+				NEXT <v-icon>mdi-arrow-right</v-icon>
 			</v-btn>
 		</div>
 	</div>
@@ -46,7 +48,8 @@ export default {
 				{ id: 5, title: "test", img: "", calories: 0, time: 0 },
 				{ id: 6, title: "test", img: "", calories: 0, time: 0 },
 				{ id: 7, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 8, title: "test", img: "", calories: 0, time: 0 }
+				{ id: 8, title: "test", img: "", calories: 0, time: 0 },
+				{ id: 9, title: "test", img: "", calories: 0, time: 0 }
 			]
 		};
 	},

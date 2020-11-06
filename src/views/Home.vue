@@ -7,13 +7,15 @@
 				></v-row>
 			</v-container>
 		</div>
-		<div class="d-flex justify-center align-center flex-column">
+		<div
+			class="d-flex justify-center align-center flex-column"
+			id="about-us"
+		>
 			<span
-				style="font-family:Tangerine; font-size:75px; margin-top:20px"
+				style="font-family:Merriweather; font-size:60px; margin-top:20px"
 			>
 				About Us</span
 			>
-
 			<div
 				class="d-flex row text--secondary px-15 py-4 text-center justify-center headline text-uppercase"
 				style="line-height: 30px; "
@@ -103,7 +105,7 @@ export default {
 }
 
 .recipe {
-	background: lightgrey;
+	background: white;
 	margin-top: 25px;
 }
 </style>
