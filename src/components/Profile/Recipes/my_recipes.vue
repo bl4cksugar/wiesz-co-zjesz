@@ -1,9 +1,6 @@
 <template>
 	<div>
 		<v-row>
-			<v-btn class="ma-2" fab small>
-				<v-icon>mdi-arrow-left</v-icon>
-			</v-btn>
 			<v-card v-for="n in 3" :key="n" class="ma-2" max-width="250">
 				<v-img
 					src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
@@ -48,9 +45,6 @@
 					</div>
 				</v-expand-transition>
 			</v-card>
-			<v-btn class="ma-2 " fab small>
-				<v-icon>mdi-arrow-right</v-icon>
-			</v-btn>
 		</v-row>
 		<v-btn color="orange lighten-1" text>
 			SHOW MORE
@@ -63,6 +57,7 @@ export default {
 	components: {},
 	data() {
 		return {
+			show: false,
 			recipes: [
 				{ id: 1, title: "test", img: "", calories: 0, time: 0 },
 				{ id: 2, title: "test", img: "", calories: 0, time: 0 },

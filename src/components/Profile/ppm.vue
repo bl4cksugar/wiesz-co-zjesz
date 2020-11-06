@@ -95,6 +95,8 @@ export default {
 	data() {
 		return {
 			ppm: "",
+			weight: 100,
+			height: 100,
 			radioGroup: 1,
 			age: 0,
 			dialog: false,
