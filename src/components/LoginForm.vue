@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="dialog" max-width="450px">
+	<v-dialog v-model="dialog" max-width="800px" height="600px">
 		<template v-slot:activator="{ on }">
 			<v-btn v-on="on" outlined color="white">
 				<span>SIGN IN</span>
@@ -7,44 +7,58 @@
 		</template>
 
 		<v-container
-			style="background:rgba(255,255,255,0.75)"
-			class="d-flex align-center justify-center py-8 "
+			class="d-flex flex-wrap align-stretch justify-center px-0 py-0"
 		>
-			<v-form ref="form" v-model="valid" lazy-validation>
-				<v-alert v-if="alert" :type="alert.type">{{
-					alert.content
-				}}</v-alert>
-				<div class="title">
-					<div
-						class=" mb-2 text-center"
-						style="color:black; font-family:Tangerine !important; font-size:50px;"
-					>
-						Welcome
+			<div
+				class="col-7 d-none d-sm-flex"
+				style="background: url('https://image.freepik.com/darmowe-zdjecie/widok-z-gory-na-ksztalt-choinki-z-piernikow-i-przyborow-kuchennych-z-miejscem-na-kopie_23-2148705388.jpg')"
+			></div>
+			<div class="col-12 col-sm-5 my-15">
+				<v-form
+					ref="form"
+					v-model="valid"
+					lazy-validation
+					class="text-center px-4"
+				>
+					<v-alert v-if="alert" :type="alert.type">{{
+						alert.content
+					}}</v-alert>
+					<div class="title">
+						<div
+							class=" mb-2 text-center"
+							style="color:black; font-family:Tangerine !important; font-size:50px;"
+						>
+							Wiesz co Zjesz
+						</div>
 					</div>
-				</div>
-				<v-text-field
-					background-color="white"
-					solo
-					v-model="email"
-					label="email"
-					prepend-inner-icon="fas fa-user-circle"
-					:rules="[rules.required, rules.email]"
-				></v-text-field>
+					<v-text-field
+						background-color="white"
+						v-model="email"
+						label="email"
+						prepend-inner-icon="fas fa-user-circle"
+						:rules="[rules.required, rules.email]"
+					></v-text-field>
 
-				<v-text-field
-					background-color="white"
-					solo
-					v-model="password"
-					label="password"
-					type="password"
-					prepend-inner-icon="fas fa-key"
-					@click:append="show1 = !show1"
-					:rules="[rules.required]"
-				></v-text-field>
-				<v-btn class="col-12" rounded @click="checkLogin()">
-					<span>SIGN IN</span>
-				</v-btn>
-			</v-form>
+					<v-text-field
+						background-color="white"
+						v-model="password"
+						label="password"
+						type="password"
+						prepend-inner-icon="fas fa-key"
+						@click:append="show1 = !show1"
+						:rules="[rules.required]"
+					></v-text-field>
+					<v-btn
+						color="indigo"
+						dark
+						class="col-6"
+						rounded
+						@click="checkLogin()"
+					>
+						<span>SIGN IN</span>
+					</v-btn>
+				</v-form>
+			</div>
 		</v-container>
 	</v-dialog>
 </template>

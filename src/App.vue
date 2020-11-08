@@ -9,11 +9,13 @@
 			</div>
 		</v-container>
 		<b-footer></b-footer>
+		<add-recipe></add-recipe>
 	</v-app>
 </template>
 <script>
 import NavBar from "./components/NavBar";
 import BFooter from "./components/footer";
+import AddRecipe from "./components/AddRecipe";
 
 export default {
 	name: "App",
@@ -24,7 +26,8 @@ export default {
 	},
 	components: {
 		NavBar,
-		BFooter
+		BFooter,
+		AddRecipe
 	}
 };
 </script>

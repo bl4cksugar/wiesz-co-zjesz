@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import registration from "../components/registration.vue";
+import Registration from "../components/Registration";
 import RecipesList from "../components/Recipes/RecipesList.vue";
 
 export default {
@@ -70,7 +70,7 @@ export default {
 		enabled: false
 	}),
 	components: {
-		registration,
+		Registration,
 		RecipesList
 	}
 };

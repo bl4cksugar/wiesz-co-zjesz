@@ -5,21 +5,22 @@
 		lg="4"
 		class="d-flex align-content-center justify-center"
 	>
-		<v-card flat class="col-12" style="background: rgba(255,255,255,0.8)">
+		<v-card
+			flat
+			class="col-12 py-8"
+			style="background: rgba(255,255,255,0.8)"
+		>
 			<div class="title text-center pt-4">
-				<div
-					style="font-family:Tangerine; font-size:75px; color: #2c3e50"
-				>
-					Join to Us
+				<div style="font-family:Merriweather; color: #2c3e50">
+					<h2>REGISTRATION</h2>
 				</div>
 				<v-alert v-if="alert" :type="alert.type">{{
 					alert.content
 				}}</v-alert>
 			</div>
 			<v-form ref="form" v-model="valid" lazy-validation>
-				<v-card-text class="col-12">
+				<v-card-text class="col-12 text-center">
 					<v-text-field
-						style="font-size:12px"
 						background-color="rgba(255, 255, 255, 0.9)"
 						color="grey"
 						outlined
@@ -55,11 +56,14 @@
 						@keyup.enter="submit"
 					></v-text-field>
 
-					<div class="btn text-center">
-						<v-btn @click="signUp" rounded width="200px"
-							>SIGN UP</v-btn
-						>
-					</div>
+					<v-btn
+						color="indigo"
+						class="col-6"
+						dark
+						@click="signUp"
+						rounded
+						>SIGN UP</v-btn
+					>
 				</v-card-text>
 			</v-form>
 		</v-card>
@@ -81,14 +85,6 @@ export default {
 			alert: null
 		};
 	},
-	components: {},
-
-	// watch: {
-	// 	menu(val) {
-	// 		val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
-	// 	}
-	// },
-
 	methods: {
 		async signUp() {
 			this.alert = null;
