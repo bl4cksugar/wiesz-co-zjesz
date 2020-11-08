@@ -1,21 +1,14 @@
 <template>
-	<div class="d-flex flex-column align-center justify-center">
-		<span
-			class="text--secondary text-uppercase"
-			style="font-family:Montserrat; font-size:15px; "
-		>
-			my basic metabolism:
-			<!-- {{ ppm }} -->
-		</span>
+	<div class="d-flex flex-column justify-center">
 		<v-dialog v-model="dialog" persistent max-width="600px">
 			<template v-slot:activator="{ on, attrs }">
-				<v-btn rounded large v-bind="attrs" v-on="on">
+				<v-btn text color="indigo" large v-bind="attrs" v-on="on">
 					<v-icon>mdi-calculator</v-icon> CALCULATE
 				</v-btn>
 			</template>
 			<v-card>
 				<v-card-title>
-					<span class="headline">Basic Metabolism</span>
+					<span class="headline">Basic Metabolism*</span>
 				</v-card-title>
 				<v-card-text>
 					<v-container>
@@ -59,13 +52,6 @@
 									required
 								></v-text-field>
 							</v-col>
-							<!-- <v-col cols="12">
-								<v-select
-									:items="['0-17', '18-29', '30-54', '54+']"
-									label="Wskaźnik aktywności fizycznej"
-									required
-								></v-select>
-							</v-col> -->
 						</v-row>
 					</v-container>
 				</v-card-text>
@@ -78,14 +64,15 @@
 						Save
 					</v-btn>
 				</v-card-actions>
+				<v-card-text>
+					<small class="text--secondary">
+						*the minimal amount of energy necessary to maintain
+						respiration, circulation, and other vital body functions
+						while fasting and at total rest.
+					</small>
+				</v-card-text>
 			</v-card>
 		</v-dialog>
-
-		<span class="text--secondary ">
-			*the minimal amount of energy necessary to maintain respiration,
-			circulation, and other vital body functions while fasting and at
-			total rest.
-		</span>
 	</div>
 </template>
 
@@ -94,7 +81,6 @@
 export default {
 	data() {
 		return {
-			ppm: "",
 			weight: 100,
 			height: 100,
 			radioGroup: 1,

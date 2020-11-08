@@ -1,49 +1,85 @@
 <template>
-	<div
-		class="profile-page col-12 d-flex justify-center align-center flex-column"
+	<v-container
+		class="profile-page d-flex justify-center align-center flex-column"
 	>
-		<span style="font-family:Merriweather; font-size:60px; ">
-			Profile
-		</span>
-
-		<div
-			class="d-flex col-12 mt-5 flex-row flex-wrap text--secondary text-center "
-		>
-			<div class="col-12  d-flex  align-center flex-column">
-				<span style="font-family:Tangerine; font-size:75px;">
-					John Doe
-				</span>
-
-				<ppm></ppm>
+		<div class="d-flex col-12 mt-5 flex-row">
+			<div class="col-12 col-md-4 d-flex align-center justify-center">
+				<v-avatar color="indigo" width="150px" height="150px"
+					><v-icon dark>
+						mdi-account-circle
+					</v-icon></v-avatar
+				>
 			</div>
-
-			<div class="d-flex col-12 flex-column justify-center align-center">
-				<span style="font-family:Merriweather; font-size:30px;">
-					My Recipes
-				</span>
-				<myrecipe></myrecipe>
-				<span style="font-family:Merriweather; font-size:30px;">
-					Favorite Recipes
-				</span>
-				<favrecipe></favrecipe>
+			<div
+				class="col-12 col-md-8 d-flex align-center justify-space-between flex-row flex-wrap"
+			>
+				<div>
+					<h2 style="font-family:Merriweather;">
+						John Doe
+					</h2>
+					<small
+						class="text--secondary text-uppercase"
+						style="font-family:Montserrat; "
+					>
+						<strong>my basic metabolism:</strong>
+						{{ `${ppm} kcal` }}
+					</small>
+				</div>
+				<div class="d-flex">
+					<ppm class="mx-2"></ppm>
+					<delete-modal class="mx-2"></delete-modal>
+				</div>
 			</div>
 		</div>
-	</div>
+		<div class="d-flex col-12 flex-column justify-center align-center">
+			<v-tabs
+				v-model="tab"
+				color="indigo accent-4"
+				centered
+				icons-and-text
+			>
+				<v-tabs-slider></v-tabs-slider>
+
+				<v-tab href="#tab-1">
+					My Recipes
+					<v-icon>mdi-silverware-fork-knife</v-icon>
+				</v-tab>
+
+				<v-tab href="#tab-2">
+					Favorites
+					<v-icon>mdi-heart</v-icon>
+				</v-tab>
+			</v-tabs>
+
+			<v-tabs-items v-model="tab">
+				<v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
+					<span style="font-family:Merriweather; font-size:30px;">
+					</span>
+					<recipes-list></recipes-list>
+				</v-tab-item>
+			</v-tabs-items>
+		</div>
+	</v-container>
 </template>
 
 <script>
-import ppm from "../components/Profile/ppm";
-import myrecipe from "../components/Profile/Recipes/my_recipes";
-import favrecipe from "../components/Profile/Recipes/fav_recipes.vue";
+import Ppm from "../components/Profile/Ppm";
+import RecipesList from "../components/Profile/RecipesList";
+import DeleteModal from "../components/Profile/DeleteModal.vue";
 
 export default {
 	name: "Profile",
-	data: () => ({}),
-
+	data() {
+		return {
+			ppm: 1630,
+			tab: null,
+			titles: ["My Recipes", "Favorite Recipes"]
+		};
+	},
 	components: {
-		myrecipe,
-		favrecipe,
-		ppm
+		RecipesList,
+		Ppm,
+		DeleteModal
 	}
 };
 </script>
