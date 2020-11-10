@@ -10,10 +10,10 @@
 			class="d-flex flex-wrap align-stretch justify-center px-0 py-0"
 		>
 			<div
-				class="col-7 d-none d-sm-flex"
-				style="background: url('https://image.freepik.com/darmowe-zdjecie/widok-z-gory-na-ksztalt-choinki-z-piernikow-i-przyborow-kuchennych-z-miejscem-na-kopie_23-2148705388.jpg')"
+				class="col-6 d-none d-sm-flex"
+				style="background: url(https://image.freepik.com/darmowe-wektory/kolorowe-tlo-mural-restauracji_23-2148682356.jpg)"
 			></div>
-			<div class="col-12 col-sm-5 my-15">
+			<div class="col-12 col-sm-6 my-15">
 				<v-form
 					ref="form"
 					v-model="valid"
@@ -26,7 +26,7 @@
 					<div class="title">
 						<div
 							class=" mb-2 text-center"
-							style="color:black; font-family:Tangerine !important; font-size:50px;"
+							style="color:black; font-family:Merriweather !important; font-size:50px;"
 						>
 							Wiesz co Zjesz
 						</div>

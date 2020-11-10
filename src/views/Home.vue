@@ -21,10 +21,11 @@
 				style="line-height: 30px; "
 			>
 				<div class="col-12 col-sm-6 d-flex justify-center align-center">
-					<v-img
+					<img
 						lazy-src="https://picsum.photos/id/11/10/6"
-						src="https://image.freepik.com/darmowe-zdjecie/widok-z-gory-pyszny-deser-czekoladowy_23-2148622318.jpg"
-					></v-img>
+						src="../assets/bg.jpg"
+						width="100%"
+					/>
 				</div>
 				<div class="col-12 col-sm-6 d-flex ">
 					<span
@@ -100,7 +101,7 @@ export default {
 	color: white;
 }
 .test {
-	background: url("../assets/bg.jpg");
+	background: url("../assets/bg2.jpg");
 	background-size: cover;
 }
 

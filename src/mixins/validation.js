@@ -4,6 +4,7 @@ export default {
 			rules: {
 				required: (value) => !!value || "Required.",
 				min: (v) => v.length >= 8 || "Min 8 characters",
+				max: (v) => v.length <= 25 || "Max 25 characters",
 				emailMatch: () =>
 					"The email and password you entered don't match",
 				email: (value) => {
