@@ -1,58 +1,67 @@
 <template>
 	<div>
-		<div class="test d-flex">
+		<!-- <div class="test d-flex">
 			<v-container class="box" align="center" justify="center" d-flex>
-				<v-row class="d-flex justify-end align-center">
-					<registration> </registration
-				></v-row>
 			</v-container>
-		</div>
+		</div> -->
+
+		<v-carousel hide-delimiters height="100vh">
+			<v-carousel-item
+				v-for="(item, i) in items"
+				:key="i"
+				:src="item.src"
+			></v-carousel-item>
+		</v-carousel>
 		<div
-			class="d-flex justify-center align-center flex-column"
-			id="about-us"
+			id="about"
+			d-flex
+			class="recipe col-12 text-center d-flex flex-column justify-center align-center"
 		>
-			<span
-				style="font-family:Merriweather; font-size:60px; margin-top:20px"
-			>
-				About Us</span
-			>
 			<div
-				class="d-flex row text--secondary px-15 py-4 text-center justify-center headline text-uppercase"
-				style="line-height: 30px; "
+				class="col-12 col-md-8 d-flex justify-center align-center flex-column"
 			>
-				<div class="col-12 col-sm-6 d-flex justify-center align-center">
-					<img
-						lazy-src="https://picsum.photos/id/11/10/6"
-						src="../assets/bg.jpg"
-						width="100%"
-					/>
-				</div>
-				<div class="col-12 col-sm-6 d-flex ">
-					<span
-						class="d-flex justify-center align-center"
-						style="font-family:Montserrat; font-size:15px; "
+				<span
+					style="font-family:RaleWay; font-size:40px; margin-top:20px; margin-bottom:10px"
+				>
+					About Us
+				</span>
+				<v-divider width="200px"></v-divider>
+				<div
+					class="d-flex row text--secondary px-15 py-4 text-center justify-center headline "
+					style="line-height: 30px; "
+				>
+					<div
+						class="col-12 col-sm-6 d-flex justify-center align-center"
 					>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Donec egestas ligula ac sodales pulvinar. Curabitur
-						velit nisi, laoreet et sodales vitae, vestibulum et
-						velit. Nunc semper tellus sit amet tempor vehicula.
-						Maecenas porta massa et sapien sollicitudin, non aliquam
-						tortor sagittis. Sed in interdum erat. Donec rutrum quam
-						nec orci iaculis, at blandit enim pulvinar. Vestibulum
-						dapibus libero quis massa volutpat suscipit mollis at
-						metus. Morbi tristique sem in eros euismod maximus.
-						Fusce venenatis nec tellus eget mattis. Donec eleifend
-						ante a sem laoreet semper. Morbi venenatis faucibus leo
-						non accumsan. Nulla velit nisi, tincidunt in lacinia
-						vitae, dictum at diam. Duis ut sapien pellentesque,
-						porta elit ac, suscipit nibh. Proin ut elit quis sapien
-						molestie suscipit et sit amet mauris. Cras tincidunt
-						feugiat urna, vel vulputate ligula posuere et. Nam vel
-						faucibus mi. Aliquam tempor vehicula justo a viverra.
-						Curabitur sodales pretium lacinia. Duis tempor tellus ac
-						nulla vestibulum, eu mattis nibh semper. Sed eu accumsan
-						nisi.
-					</span>
+						<img
+							lazy-src="https://picsum.photos/id/11/10/6"
+							src="../assets/bg.jpg"
+							width="100%"
+						/>
+					</div>
+
+					<div class="col-12 col-sm-6 d-flex ">
+						<span
+							class="d-flex justify-center align-center"
+							style="font-family:Montserrat; font-size:15px; "
+						>
+							Lorem ipsum dolor sit amet, consectetur adipiscing
+							elit. Donec egestas ligula ac sodales pulvinar.
+							Curabitur velit nisi, laoreet et sodales vitae,
+							vestibulum et velit. Nunc semper tellus sit amet
+							tempor vehicula. Maecenas porta massa et sapien
+							sollicitudin, non aliquam tortor sagittis. Sed in
+							interdum erat. Donec rutrum quam nec orci iaculis,
+							at blandit enim pulvinar. Vestibulum dapibus libero
+							quis massa volutpat suscipit mollis at metus. Morbi
+							tristique sem in eros euismod maximus. Fusce
+							venenatis nec tellus eget mattis. Donec eleifend
+							ante a sem laoreet semper. Morbi venenatis faucibus
+							leo non accumsan. Nulla velit nisi, tincidunt in
+							lacinia vitae, dictum at diam. Duis ut sapien
+							pellentesque, porta elit ac, suscipit nibh.
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -61,23 +70,39 @@
 </template>
 
 <script>
-import Registration from "../components/Registration";
 import RecipesList from "../components/Recipes/RecipesList.vue";
 
 export default {
 	name: "Home",
 	data: () => ({
+		inset: false,
 		includeFiles: true,
-		enabled: false
+		enabled: false,
+		items: [
+			{
+				src: require("../assets/bg7.jpg")
+			},
+			{
+				src: require("../assets/bg8.jpg")
+			},
+			{
+				src: require("../assets/bg9.jpg")
+			},
+			{
+				src: require("../assets/blueberry.jpg")
+			}
+		]
 	}),
+
 	components: {
-		Registration,
 		RecipesList
 	}
 };
 </script>
 
 <style>
+#about {
+}
 .row {
 	align-content: center;
 	justify-content: center;
@@ -97,16 +122,12 @@ export default {
 	margin-bottom: 50px;
 }
 
-.title {
-	color: white;
-}
 .test {
-	background: url("../assets/bg2.jpg");
+	background: url("../assets/bg7.jpg");
 	background-size: cover;
 }
 
 .recipe {
-	background: white;
 	margin-top: 25px;
 }
 </style>

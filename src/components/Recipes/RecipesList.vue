@@ -4,28 +4,28 @@
 		d-flex
 		class="recipe col-12 text-center d-flex flex-column justify-center align-center"
 	>
-		<span style="font-family:Merriweather; font-size:60px; ">
+		<span style="font-family:Raleway; font-size:40px; margin-bottom:10px">
 			Recipe
 		</span>
-
+		<v-divider width="250px"></v-divider>
 		<search @dispatchFindRecipe="findRecipe"></search>
 
-		<div class="col-12 col-md-8 d-flex row">
+		<div class="col-10 col-md-6 d-flex row">
 			<div
 				v-for="recipe in recipes"
 				:key="recipe.name"
-				class=" col-12 col-sm-6 col-md-4 "
+				class=" col-10 col-sm-4 col-md-4 "
 			>
 				<recipe-card :recipe="recipe"></recipe-card>
 			</div>
 		</div>
-		<div class="col-12 d-flex align-center justify-center ">
-			<v-btn class="ma-2" rounded large>
-				<v-icon>mdi-arrow-left</v-icon> BACK
+		<div class="col-10 col-md-6 d-flex align-center justify-center ">
+			<v-btn class="ma-2" icon>
+				<v-icon>mdi-arrow-left</v-icon>
 			</v-btn>
-
-			<v-btn class="ma-2 " rounded large>
-				NEXT <v-icon>mdi-arrow-right</v-icon>
+			<v-spacer></v-spacer>
+			<v-btn class="ma-2 " icon>
+				<v-icon>mdi-arrow-right</v-icon>
 			</v-btn>
 		</div>
 	</div>
@@ -60,3 +60,12 @@ export default {
 	}
 };
 </script>
+
+<style lang="scss">
+#recipes {
+	background: url("../../assets/bg3.jpg");
+
+	background-position: center;
+	background-repeat: repeat-y;
+}
+</style>

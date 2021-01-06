@@ -1,5 +1,5 @@
 <template>
-	<div class="col-12 d-flex justify-center align-center flex-column">
+	<div class="col-12 md-8 d-flex justify-center align-center flex-column">
 		<span
 			class="text--secondary text-uppercase"
 			style="font-family:Montserrat; font-size:15px; "

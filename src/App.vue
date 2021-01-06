@@ -4,7 +4,7 @@
 		<v-container fluid class="pa-0">
 			<div class="row">
 				<div class="col-12 px-0 py-0">
-					<router-view></router-view>
+					<router-view> </router-view>
 				</div>
 			</div>
 		</v-container>

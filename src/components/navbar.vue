@@ -1,6 +1,12 @@
 <template>
 	<div>
-		<v-app-bar fixed scroll-off-screen class="app-bar">
+		<v-app-bar
+			fixed
+			hide-on-scroll
+			flat
+			:class="[shouldBeTransparent ? 'transparent' : '']"
+			class="app-bar px-12"
+		>
 			<v-toolbar-title>
 				<div class="d-flex flex-wrap">
 					<router-link to="/" tag="a" class="logo-text">
@@ -31,6 +37,8 @@
 				</div>
 			</div>
 			<login-form v-if="!isLogged"></login-form>
+			<register-form v-if="!isLogged"></register-form>
+
 			<v-btn v-else color="red" @click="logout()">
 				<span>SIGN OUT</span>
 			</v-btn>
@@ -74,6 +82,7 @@
 import { mapGetters, mapActions } from "vuex";
 import mediaQuery from "../mixins/mediaQuery";
 import LoginForm from "./LoginForm.vue";
+import RegisterForm from "./Registration.vue";
 
 export default {
 	mixins: [mediaQuery],
@@ -81,6 +90,7 @@ export default {
 		return {
 			isToggled: false,
 			group: null,
+			transparentRoutes: ["Home"],
 			menuItems: [
 				{
 					name: "Home",
@@ -92,7 +102,7 @@ export default {
 				{
 					name: "About Us",
 					isRouterLink: false,
-					route: "about-us",
+					route: "about",
 					icon: "information",
 					auth: false
 				},
@@ -114,7 +124,8 @@ export default {
 		};
 	},
 	components: {
-		LoginForm
+		LoginForm,
+		RegisterForm
 	},
 	methods: {
 		...mapActions(["destroySession"]),
@@ -139,6 +150,9 @@ export default {
 			return this.menuItems.filter(
 				(item) => !item.auth || (item.auth && this.isLogged)
 			);
+		},
+		shouldBeTransparent() {
+			return this.transparentRoutes.includes(this.$route.name);
 		}
 	}
 	// async mounted() {
@@ -281,7 +295,10 @@ export default {
 	}
 }
 .app-bar {
-	background: rgb(2, 68, 66) !important;
+	background: rgb(41, 37, 46) !important;
+	&.transparent {
+		background: transparent !important;
+	}
 	.logo-text {
 		text-decoration: none;
 		color: white;

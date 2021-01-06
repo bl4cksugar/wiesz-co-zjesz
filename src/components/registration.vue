@@ -1,73 +1,84 @@
 <template>
-	<v-col
-		sm="12"
-		md="6"
-		lg="4"
-		class="d-flex align-content-center justify-center"
-	>
-		<v-card
-			flat
-			class="col-12 py-8"
-			style="background: rgba(255,255,255,0.8)"
+	<v-dialog v-model="dialog" max-width="800px" height="600px">
+		<template v-slot:activator="{ on }">
+			<v-btn v-on="on" outlined color="white">
+				<span> SIGN UP</span>
+			</v-btn>
+		</template>
+		<v-container
+			class="d-flex flex-wrap align-stretch justify-center px-0 py-0"
 		>
-			<div class="title text-center pt-4">
-				<div style="font-family:Merriweather; color: #2c3e50">
-					<h2>REGISTRATION</h2>
-				</div>
-				<v-alert v-if="alert" :type="alert.type">{{
-					alert.content
-				}}</v-alert>
+			<div
+				class="col-6 d-none d-sm-flex"
+				style="background: url(https://image.freepik.com/darmowe-zdjecie/swieze-jagody-na-bialym-tle-widok-z-gory_254005-19.jpg) "
+			></div>
+			<div class="col-12 col-sm-6 my-15">
+				<v-form
+					ref="form"
+					v-model="valid"
+					lazy-validation
+					class="text-center px-4"
+				>
+					<v-alert v-if="alert" :type="alert.type">{{
+						alert.content
+					}}</v-alert>
+					<div class="title">
+						<div
+							class=" mb-2 text-center"
+							style="color:black; font-family:Merriweather !important; font-size:50px;"
+						>
+							Registration
+						</div>
+						<v-alert v-if="alert" :type="alert.type">{{
+							alert.content
+						}}</v-alert>
+					</div>
+
+					<v-card-text class="col-12 text-center">
+						<v-text-field
+							background-color="rgba(255, 255, 255, 0.9)"
+							color="grey"
+							outlined
+							v-model="nickname"
+							label="Nickname"
+						></v-text-field>
+						<v-text-field
+							background-color="rgba(255, 255, 255, 0.9)"
+							color="grey"
+							outlined
+							v-model="email"
+							label="E-mail"
+							:rules="[rules.required, rules.email]"
+						></v-text-field>
+
+						<v-text-field
+							background-color="rgba(255, 255, 255, 0.9)"
+							color="grey"
+							outlined
+							v-model="password"
+							:append-icon="
+								showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'
+							"
+							:rules="[rules.required, rules.min]"
+							:type="showPassword ? 'text' : 'password'"
+							label="Password"
+							prepend-inner-icon="fas fa-key"
+							@click:append="showPassword = !showPassword"
+						></v-text-field>
+
+						<v-btn
+							color="indigo"
+							class="col-6"
+							dark
+							@click="signUp"
+							rounded
+							>SIGN UP</v-btn
+						>
+					</v-card-text>
+				</v-form>
 			</div>
-			<v-form ref="form" v-model="valid" lazy-validation>
-				<v-card-text class="col-12 text-center">
-					<v-text-field
-						background-color="rgba(255, 255, 255, 0.9)"
-						color="grey"
-						outlined
-						v-model="email"
-						label="E-mail"
-						:rules="[rules.required, rules.email]"
-					></v-text-field>
-
-					<v-text-field
-						background-color="rgba(255, 255, 255, 0.9)"
-						color="grey"
-						outlined
-						v-model="password"
-						:append-icon="
-							showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'
-						"
-						:rules="[rules.required, rules.min]"
-						:type="showPassword ? 'text' : 'password'"
-						label="Password"
-						prepend-inner-icon="fas fa-key"
-						@click:append="showPassword = !showPassword"
-					></v-text-field>
-
-					<v-text-field
-						background-color="rgba(255, 255, 255, 0.9)"
-						color="grey"
-						outlined
-						v-model="repeatPassword"
-						:rules="[rules.required, rules.min]"
-						:type="showPassword ? 'text' : 'password'"
-						label="Repeat password"
-						prepend-inner-icon="fas fa-key"
-						@keyup.enter="submit"
-					></v-text-field>
-
-					<v-btn
-						color="indigo"
-						class="col-6"
-						dark
-						@click="signUp"
-						rounded
-						>SIGN UP</v-btn
-					>
-				</v-card-text>
-			</v-form>
-		</v-card>
-	</v-col>
+		</v-container>
+	</v-dialog>
 </template>
 <script>
 import axios from "axios";

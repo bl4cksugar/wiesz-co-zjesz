@@ -2,7 +2,7 @@
 	<v-container
 		class="profile-page d-flex justify-center align-center flex-column"
 	>
-		<div class="d-flex col-12 mt-5 flex-row">
+		<div class="d-flex col-10 col-md-6 flex-row">
 			<div class="col-12 col-md-4 d-flex align-center justify-center">
 				<v-avatar color="indigo" width="150px" height="150px"
 					><v-icon dark>
@@ -31,7 +31,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="d-flex col-12 flex-column justify-center align-center">
+		<div class="d-flex col-10 flex-column justify-center align-center">
 			<v-tabs
 				v-model="tab"
 				color="indigo accent-4"
@@ -50,14 +50,15 @@
 					<v-icon>mdi-heart</v-icon>
 				</v-tab>
 			</v-tabs>
-
-			<v-tabs-items v-model="tab">
-				<v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
-					<span style="font-family:Merriweather; font-size:30px;">
-					</span>
-					<recipes-list></recipes-list>
-				</v-tab-item>
-			</v-tabs-items>
+			<div class="col-10 col-md-6 d-flex row">
+				<v-tabs-items v-model="tab">
+					<v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
+						<span style="font-family:Merriweather; font-size:30px;">
+						</span>
+						<recipes-list></recipes-list>
+					</v-tab-item>
+				</v-tabs-items>
+			</div>
 		</div>
 	</v-container>
 </template>

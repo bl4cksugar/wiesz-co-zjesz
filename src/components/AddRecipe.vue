@@ -56,7 +56,8 @@
 
 						<br />
 						<h3>List of ingredients</h3>
-						<v-autocomplete
+
+						<!-- <v-autocomplete
 							flat
 							chips
 							v-model="pickedIngridients"
@@ -98,7 +99,7 @@
 									</v-list-item-content>
 								</template>
 							</template>
-						</v-autocomplete>
+						</v-autocomplete> -->
 						<div class="d-flex flex-column flex-md-row">
 							<div class="col-12 col-md-6 py-0 px-0 pr-md-2">
 								<h3>Calories</h3>
