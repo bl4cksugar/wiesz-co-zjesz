@@ -40,14 +40,6 @@
 							prepend-inner-icon="fas fa-user-circle"
 							:rules="[rules.required, rules.email]"
 						></v-text-field>
-						<v-text-field
-							background-color="white"
-							v-model="email"
-							outlined
-							label="email"
-							prepend-inner-icon="fas fa-user-circle"
-							:rules="[rules.required, rules.email]"
-						></v-text-field>
 
 						<v-text-field
 							background-color="white"
@@ -76,7 +68,6 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import { mapActions } from "vuex";
 import validation from "../mixins/validation";
 
@@ -92,10 +83,20 @@ export default {
 	},
 	mixins: [validation],
 	methods: {
-		...mapActions(["setSession"]),
-		checkLogin() {
-			this.setSession({ name: "natka" });
-			this.dialog = false;
+		...mapActions(["setNotification"]),
+		async checkLogin() {
+			const result = await this.$auth.logIn({
+				email: this.email,
+				password: this.password
+			});
+			if (result.success) {
+				this.dialog = false;
+			} else {
+				this.setNotification({
+					message: result.errors.message,
+					color: "red"
+				});
+			}
 		}
 	},
 	components: {}

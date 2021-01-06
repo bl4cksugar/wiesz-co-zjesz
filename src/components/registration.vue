@@ -81,8 +81,8 @@
 	</v-dialog>
 </template>
 <script>
-import axios from "axios";
 import validation from "../mixins/validation";
+import { mapActions } from "vuex";
 export default {
 	mixins: [validation],
 	data() {
@@ -90,50 +90,34 @@ export default {
 			showPassword: false,
 			password: "",
 			repeatPassword: "",
-			surname: "",
+			nickname: "",
+			dialog: false,
 			email: "",
 			valid: null,
 			alert: null
 		};
 	},
 	methods: {
+		...mapActions(["setNotification"]),
 		async signUp() {
 			this.alert = null;
 			if (this.$refs.form.validate()) {
-				try {
-					let result = await axios.post("auth/signup", {
-						email: this.email,
-						password: this.password,
-						password_confirmation: this.repeatPassword,
-						name: this.surname
+				const result = await this.$auth.register({
+					email: this.email,
+					password: this.password,
+					nickname: this.nickname
+				});
+				if (result.success) {
+					this.setNotification({
+						message: "Register successfully. Now you can login",
+						color: "green"
 					});
-					if (result) {
-						if (!result.data)
-							this.alert = {
-								state: true,
-								type: "error",
-								content: "Passwords must be the same!"
-							};
-						else
-							this.alert = {
-								state: true,
-								type: "success",
-								content: result.data.message
-							};
-					} else {
-						this.alert = {
-							state: true,
-							type: "error",
-							content: "Something goes wrong! Try again"
-						};
-					}
-				} catch {
-					this.alert = {
-						state: true,
-						type: "error",
-						content: "Something goes wrong! Try again"
-					};
-					return;
+					this.dialog = false;
+				} else {
+					this.setNotification({
+						message: result.errors.message,
+						color: "red"
+					});
 				}
 			}
 		},

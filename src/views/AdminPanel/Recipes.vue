@@ -3,27 +3,82 @@
 		<v-col
 			sm="2"
 			style="min-height:100vh; background:#272727 "
-			class="d-flex justify-center align-center"
+			class="d-flex justify-center align-start mt-10"
 		>
 			<side-menu></side-menu>
 		</v-col>
 		<v-col sm="10">
 			<v-card>
+				<v-dialog v-model="dialog" max-width="500px">
+					<v-card>
+						<v-card-title>
+							<span class="headline">{{ formTitle }}</span>
+						</v-card-title>
+
+						<v-card-text>
+							<v-container>
+								<v-row>
+									<v-col cols="12">
+										<v-text-field
+											v-model="editedItem.title"
+											label="Title"
+										></v-text-field>
+										<v-text-field
+											v-model="editedItem.description"
+											label="Description"
+										></v-text-field>
+									</v-col>
+								</v-row>
+							</v-container>
+						</v-card-text>
+
+						<v-card-actions>
+							<v-spacer></v-spacer>
+							<v-btn color="blue darken-1" text @click="close"
+								>Cancel</v-btn
+							>
+							<v-btn color="blue darken-1" text @click="save"
+								>Save</v-btn
+							>
+						</v-card-actions>
+					</v-card>
+				</v-dialog>
+				<v-dialog v-model="dialogDelete" max-width="500px">
+					<v-card>
+						<v-card-title class="headline"
+							>Are you sure you want to delete this
+							item?</v-card-title
+						>
+						<v-card-actions>
+							<v-spacer></v-spacer>
+							<v-btn
+								color="blue darken-1"
+								text
+								@click="closeDelete"
+								>Cancel</v-btn
+							>
+							<v-btn
+								color="blue darken-1"
+								text
+								@click="deleteItemConfirm"
+								>OK</v-btn
+							>
+							<v-spacer></v-spacer>
+						</v-card-actions>
+					</v-card>
+				</v-dialog>
 				<v-data-table
 					:headers="headers"
-					:items="users"
+					:items="recipes"
 					:search="search"
-					:options.sync="options"
-					:server-items-length="totalSurnames"
+					:server-items-length="totalRecipes"
 					:loading="loading"
 					class="elevation-1"
 				>
 					<template v-slot:top>
 						<v-toolbar flat color="white">
 							<v-toolbar-title>Recipes</v-toolbar-title>
-
 							<v-divider class="mx-4" inset vertical></v-divider>
-
 							<v-spacer></v-spacer>
 							<v-text-field
 								v-model="search"
@@ -32,54 +87,13 @@
 								single-line
 								hide-details
 							></v-text-field>
-
-							<v-dialog v-model="dialog" max-width="500px">
-								<v-card>
-									<v-card-title>
-										<span class="headline">{{
-											formTitle
-										}}</span>
-									</v-card-title>
-
-									<v-card-text>
-										<v-container>
-											<v-row>
-												<v-col cols="12" sm="6" md="4">
-													<v-text-field
-														v-model="
-															editedItem.user_id
-														"
-														label="User Id"
-													></v-text-field>
-												</v-col>
-											</v-row>
-										</v-container>
-									</v-card-text>
-
-									<v-card-actions>
-										<v-spacer></v-spacer>
-										<v-btn
-											color="blue darken-1"
-											text
-											@click="close"
-											>Cancel</v-btn
-										>
-										<v-btn
-											color="blue darken-1"
-											text
-											@click="save"
-											>Save</v-btn
-										>
-									</v-card-actions>
-								</v-card>
-							</v-dialog>
 						</v-toolbar>
 						<v-alert v-if="alert" :type="alert.type">{{
 							alert.content
 						}}</v-alert>
 					</template>
 
-					<template v-slot:item.action="{ item }">
+					<template v-slot:[`item.actions`]="{ item }">
 						<v-btn
 							class="mx-2"
 							small
@@ -117,8 +131,9 @@ export default {
 		return {
 			dialog: false,
 			dialogDelete: false,
-			SideMenusearch: "",
-
+			loading: false,
+			alert: null,
+			search: "",
 			headers: [
 				{
 					text: "ID",
@@ -127,15 +142,35 @@ export default {
 					value: "id"
 				},
 
-				{ text: "title" },
-				{ text: "description" },
-				{ text: "calories" },
-				{ text: "time" },
-				{ text: "integrient" },
-				{ text: "user", value: "user_id" },
-				{ text: "action", value: "action", sortable: false }
+				{ text: "Title", value: "title" },
+				{ text: "Description", value: "description" },
+				{ text: "Calories", value: "calories" },
+				{ text: "Time", value: "time" },
+				{ text: "Ingredients", value: "ingredients" },
+				{ text: "User", value: "user" },
+				{ text: "Actions", value: "actions", sortable: false }
 			],
-			recipes: [],
+			recipes: [
+				{
+					id: 1,
+					title: "Title",
+					description: "asdasd",
+					calories: 100,
+					time: 160,
+					ingredients: ["jajko", "mleko"],
+					user: 1
+				},
+				{
+					id: 2,
+					title: "Title",
+					description: "asdasd",
+					calories: 100,
+					time: 160,
+					ingredients: ["jajko", "mleko"],
+					user: 1
+				}
+			],
+			totalRecipes: 2,
 			editedIndex: -1,
 			editedItem: {
 				name: "",
@@ -150,11 +185,7 @@ export default {
 				date: 0,
 				mail: 0,
 				boolean: false
-			},
-
-			loading: false,
-			users: [],
-			item: []
+			}
 		};
 	},
 	components: { SideMenu },
@@ -173,100 +204,23 @@ export default {
 		}
 	},
 
-	created() {
-		this.initialize();
-	},
+	created() {},
 
 	methods: {
-		initialize() {
-			this.desserts = [
-				{
-					name: "Frozen Yogurt",
-					calories: 159,
-					fat: 6.0,
-					carbs: 24,
-					protein: 4.0
-				},
-				{
-					name: "Ice cream sandwich",
-					calories: 237,
-					fat: 9.0,
-					carbs: 37,
-					protein: 4.3
-				},
-				{
-					name: "Eclair",
-					calories: 262,
-					fat: 16.0,
-					carbs: 23,
-					protein: 6.0
-				},
-				{
-					name: "Cupcake",
-					calories: 305,
-					fat: 3.7,
-					carbs: 67,
-					protein: 4.3
-				},
-				{
-					name: "Gingerbread",
-					calories: 356,
-					fat: 16.0,
-					carbs: 49,
-					protein: 3.9
-				},
-				{
-					name: "Jelly bean",
-					calories: 375,
-					fat: 0.0,
-					carbs: 94,
-					protein: 0.0
-				},
-				{
-					name: "Lollipop",
-					calories: 392,
-					fat: 0.2,
-					carbs: 98,
-					protein: 0
-				},
-				{
-					name: "Honeycomb",
-					calories: 408,
-					fat: 3.2,
-					carbs: 87,
-					protein: 6.5
-				},
-				{
-					name: "Donut",
-					calories: 452,
-					fat: 25.0,
-					carbs: 51,
-					protein: 4.9
-				},
-				{
-					name: "KitKat",
-					calories: 518,
-					fat: 26.0,
-					carbs: 65,
-					protein: 7
-				}
-			];
-		},
-
 		editItem(item) {
-			this.editedIndex = this.desserts.indexOf(item);
+			this.editedIndex = this.recipes.indexOf(item);
 			this.editedItem = Object.assign({}, item);
 			this.dialog = true;
 		},
 
 		deleteItem(item) {
-			this.editedIndex = this.desserts.indexOf(item);
+			this.editedIndex = this.recipes.indexOf(item);
 			this.editedItem = Object.assign({}, item);
 			this.dialogDelete = true;
 		},
 
 		deleteItemConfirm() {
-			this.desserts.splice(this.editedIndex, 1);
+			this.recipes.splice(this.editedIndex, 1);
 			this.closeDelete();
 		},
 
@@ -288,35 +242,12 @@ export default {
 
 		save() {
 			if (this.editedIndex > -1) {
-				Object.assign(this.desserts[this.editedIndex], this.editedItem);
+				Object.assign(this.recipes[this.editedIndex], this.editedItem);
 			} else {
-				this.desserts.push(this.editedItem);
+				this.recipes.push(this.editedItem);
 			}
 			this.close();
 		}
-
-		// editItem(item) {
-		// 	this.editedIndex = this.recipes.indexOf(item);
-		// 	this.editedItem = Object.assign({}, item);
-		// 	this.dialog = true;
-		// },
-
-		// async deleteItem(item) {
-		// 	const index = this.recipes.indexOf(item);
-		// 	confirm("Are you sure you want to delete this item?") &&
-		// 		this.families.splice(index, 1);
-		// 	let result = await axios.post("/auth/recipes/delete", {
-		// 		id: item.id
-		// 	});
-		// },
-
-		// close() {
-		// 	this.dialog = false;
-		// 	setTimeout(() => {
-		// 		this.editedItem = Object.assign({}, this.defaultItem);
-		// 		this.editedIndex = -1;
-		// 	}, 300);
-		// }
 	}
 };
 </script>

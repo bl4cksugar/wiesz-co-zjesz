@@ -3,7 +3,7 @@
 		<v-col
 			sm="2"
 			style="min-height:100vh; background:#272727 "
-			class="d-flex justify-center align-center "
+			class="d-flex justify-center align-start mt-10"
 		>
 			<side-menu></side-menu>
 		</v-col>
@@ -24,8 +24,7 @@
 					:headers="headers"
 					:items="users"
 					:search="search"
-					:options.sync="options"
-					:server-items-length="totalSurnames"
+					:server-items-length="totalUsers"
 					:loading="loading"
 					class="elevation-1"
 				></v-data-table>
@@ -41,6 +40,7 @@ export default {
 	data() {
 		return {
 			search: "",
+			loading: false,
 			headers: [
 				{
 					text: "ID",
@@ -53,7 +53,8 @@ export default {
 				{ text: "isBanned", value: "boolean" },
 				{ text: "isDeleted", value: "boolean" }
 			],
-			users: []
+			users: [],
+			totalUsers: 0
 		};
 	}
 };
