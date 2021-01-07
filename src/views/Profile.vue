@@ -2,6 +2,7 @@
 	<v-container
 		class="profile-page d-flex justify-center align-center flex-column"
 	>
+		<add-recipe></add-recipe>
 		<div class="d-flex col-10 col-md-6 flex-row">
 			<div class="col-12 col-md-4 d-flex align-center justify-center">
 				<v-avatar color="indigo" width="150px" height="150px"
@@ -67,6 +68,7 @@
 import Ppm from "../components/Profile/Ppm";
 import RecipesList from "../components/Profile/RecipesList";
 import DeleteModal from "../components/Profile/DeleteModal.vue";
+import AddRecipe from "../components/AddRecipe";
 
 export default {
 	name: "Profile",
@@ -80,7 +82,8 @@ export default {
 	components: {
 		RecipesList,
 		Ppm,
-		DeleteModal
+		DeleteModal,
+		AddRecipe
 	}
 };
 </script>
