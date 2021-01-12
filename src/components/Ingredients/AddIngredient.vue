@@ -1,11 +1,9 @@
 <template>
 	<v-dialog v-model="dialog" max-width="600px">
 		<template v-slot:activator="{ on, attrs }">
-			<v-fab-transition>
-				<v-btn v-bind="attrs" v-on="on" class="success mx-auto">
-					<v-icon>mdi-plus</v-icon>
-				</v-btn>
-			</v-fab-transition>
+			<v-btn v-bind="attrs" v-on="on" class="success mx-auto">
+				<v-icon>mdi-plus</v-icon>
+			</v-btn>
 		</template>
 		<v-card>
 			<v-card-title>
@@ -13,7 +11,6 @@
 			</v-card-title>
 			<v-card-text>
 				<v-container>
-					<h3>Title of recipe</h3>
 					<v-form
 						ref="form"
 						v-model="valid"
@@ -22,10 +19,10 @@
 					>
 						<div class="d-flex flex-column">
 							<div class="col-12 py-0 px-0">
-								<h3>Name</h3>
+								<h3>Recipe title</h3>
 								<v-text-field
 									v-model="name"
-									flat
+									solo
 									prepend-inner-icon="mdi-calculator"
 									:rules="[rules.required]"
 									type="text"
@@ -36,13 +33,12 @@
 								<h3>Calories</h3>
 								<v-text-field
 									v-model="calories"
-									flat
 									prepend-inner-icon="mdi-calculator"
 									:rules="[rules.number]"
 									type="number"
 									min="0"
 									suffix="kcal"
-									outlined
+									solo
 								></v-text-field>
 							</div>
 						</div>
@@ -67,15 +63,26 @@ export default {
 	data() {
 		return {
 			name: "",
-			calories: "",
+			calories: 0,
 			valid: null,
-			dialog: true
+			dialog: false
 		};
 	},
 	mixins: [validation],
 	methods: {
-		async addIngredient(){
-
+		async addIngredient() {
+			const result = await this.$ingredient.addIngredient({
+				name: this.name,
+				calories: +this.calories
+			});
+			if (result.success) {
+				this.dialog = false;
+			} else {
+				this.setNotification({
+					message: result.errors.message,
+					color: "red"
+				});
+			}
 		}
 	}
 };

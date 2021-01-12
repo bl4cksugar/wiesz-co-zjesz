@@ -26,19 +26,22 @@
 					>
 						{{ item.name }}
 					</v-btn>
-					<v-btn
-						v-else
-						text
-						@click="scrollTo(item.route)"
-						color="white"
-					>
+					<v-btn v-else text @click="goTo(item.route)" color="white">
 						{{ item.name }}
 					</v-btn>
 				</div>
 			</div>
+			<v-btn
+				v-if="isAdmin"
+				color="green"
+				class="mr-1"
+				router-link
+				:to="{ name: 'UsersPanel' }"
+			>
+				<span>Admin</span>
+			</v-btn>
 			<login-form v-if="!isLogged"></login-form>
 			<register-form v-if="!isLogged"></register-form>
-
 			<v-btn v-else color="red" @click="logout()">
 				<span>SIGN OUT</span>
 			</v-btn>
@@ -134,18 +137,22 @@ export default {
 				behavior: "smooth"
 			});
 		},
-		goTo(item) {
+		async goTo(item) {
 			if (item.isRouterLink) {
-				this.$router.push({ path: item.route });
+				await this.$router.push({ path: item.route });
 				this.scrollTo("app");
-			} else this.scrollTo(item.route);
+			} else {
+				if (this.$route.name !== "Home")
+					await this.$router.push({ name: "Home" });
+				this.scrollTo(item);
+			}
 		},
 		logout() {
 			this.destroySession();
 		}
 	},
 	computed: {
-		...mapGetters(["isLogged"]),
+		...mapGetters(["isLogged", "isAdmin"]),
 		filtredMenuItems() {
 			return this.menuItems.filter(
 				(item) => !item.auth || (item.auth && this.isLogged)

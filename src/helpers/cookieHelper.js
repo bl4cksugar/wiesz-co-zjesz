@@ -10,7 +10,7 @@ const defaultParams = {
 
 export default {
 	deleteSessionCookie() {
-		cookie.remove(SESSION_COOKIE_NAME, "/web", APP_DOMAIN);
+		cookie.remove(SESSION_COOKIE_NAME, "", APP_DOMAIN);
 	},
 	hasSessionCookie() {
 		return !!cookie.get(SESSION_COOKIE_NAME);
@@ -20,7 +20,7 @@ export default {
 			SESSION_COOKIE_NAME,
 			token,
 			defaultParams.expires,
-			"/web",
+			"",
 			APP_DOMAIN
 		);
 	},

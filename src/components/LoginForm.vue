@@ -85,17 +85,20 @@ export default {
 	methods: {
 		...mapActions(["setNotification"]),
 		async checkLogin() {
-			const result = await this.$auth.logIn({
-				email: this.email,
-				password: this.password
-			});
-			if (result.success) {
-				this.dialog = false;
-			} else {
-				this.setNotification({
-					message: result.errors.message,
-					color: "red"
+			const isValid = await this.$refs.form.validate();
+			if (isValid) {
+				const result = await this.$auth.logIn({
+					email: this.email,
+					password: this.password
 				});
+				if (result.success) {
+					this.dialog = false;
+				} else {
+					this.setNotification({
+						message: result.errors.message,
+						color: "red"
+					});
+				}
 			}
 		}
 	},

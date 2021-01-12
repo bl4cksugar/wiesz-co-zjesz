@@ -14,7 +14,11 @@ export default {
 				number: (value) => {
 					const pattern = /^(0|[1-9][0-9]*)$/;
 					return pattern.test(value) || "Only numbers!";
-				}
+				},
+				maxSize: (value) =>
+					!value ||
+					value.size < 2000000 ||
+					"Avatar size should be less than 2 MB!"
 			}
 		};
 	}

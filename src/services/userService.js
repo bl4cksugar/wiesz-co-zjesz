@@ -10,6 +10,14 @@ export default function(Vue) {
 			return result;
 		},
 
+		async deleteUser(id) {
+			const result = await requestSender.send({
+				method: "delete",
+				url: `/users/${+id}`
+			});
+			return result;
+		},
+
 		async unbanUser(id) {
 			const result = await requestSender.send({
 				method: "put",

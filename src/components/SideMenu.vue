@@ -7,6 +7,9 @@
 		<v-row class="my-2 mx-0">
 			<v-btn to="Recipes" block rounded>RECIPES</v-btn>
 		</v-row>
+		<v-row class="my-2 mx-0">
+			<v-btn to="Ingredients" block rounded>INGREDIENTS</v-btn>
+		</v-row>
 	</div>
 </template>
 

@@ -35,7 +35,7 @@
 				</v-dialog>
 				<v-data-table
 					:headers="headers"
-					:items="users"
+					:items="ingredients"
 					:search="search"
 					:server-items-length="pagination.total"
 					:page.sync="pagination.currentPage"
@@ -53,7 +53,7 @@
 					</template>
 					<template v-slot:top>
 						<v-toolbar flat color="white">
-							<v-toolbar-title>Users</v-toolbar-title>
+							<v-toolbar-title>Ingredients</v-toolbar-title>
 							<v-divider class="mx-4" inset vertical></v-divider>
 							<v-spacer></v-spacer>
 							<div class="col-md-4">
@@ -70,7 +70,7 @@
 									color="indigo"
 									dark
 									class="ml-3"
-									@click="getUsers()"
+									@click="getIngredients()"
 								>
 									<span>Search</span>
 								</v-btn>
@@ -168,7 +168,7 @@ export default {
 				{ text: "IsBanned", value: "isBanned", sortable: false },
 				{ text: "Actions", value: "actions", sortable: false }
 			],
-			users: []
+			ingredients: []
 		};
 	},
 	components: { SideMenu },
@@ -182,43 +182,32 @@ export default {
 	},
 
 	created() {
-		this.getUsers();
+		this.getIngredients();
 	},
 	watch: {
 		dialogDelete(val) {
 			val || this.closeDelete();
 		},
 		currentPage() {
-			this.getUsers();
+			this.getIngredients();
 		},
 		perPage() {
-			this.getUsers();
+			this.getIngredients();
 		}
 	},
 
 	methods: {
-		async blockItem(id) {
-			const result = await this.$user.banUser(id);
-			if (result.success) {
-				this.getUsers();
-			}
-		},
-		async unblockItem(id) {
-			const result = await this.$user.unbanUser(id);
-			if (result.success) {
-				this.getUsers();
-			}
-		},
-
 		deleteItem(item) {
 			this.toDeleteId = item.id;
 			this.dialogDelete = true;
 		},
 
 		async deleteItemConfirm() {
-			const result = await this.$user.deleteUser(this.toDeleteId);
+			const result = await this.$ingredient.deleteIngredient(
+				this.toDeleteId
+			);
 			if (result.success) {
-				this.getUsers();
+				this.getIngredients();
 				this.closeDelete();
 			}
 		},
@@ -230,15 +219,15 @@ export default {
 			});
 		},
 
-		async getUsers() {
+		async getIngredients() {
 			this.loading = true;
-			const result = await this.$user.getUsers({
+			const result = await this.$ingredient.getIngredients({
 				page: this.pagination.currentPage,
 				pageSize: this.pagination.perPage,
 				searchQuery: this.search
 			});
 			if (result.success) {
-				this.users = result.data.results;
+				this.ingredients = result.data.results;
 				this.pagination.total = result.data.count;
 			}
 			this.loading = false;

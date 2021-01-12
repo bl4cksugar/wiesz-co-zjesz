@@ -9,44 +9,6 @@
 		</v-col>
 		<v-col sm="10" style="min-height:100vh;">
 			<v-card class="data">
-				<v-dialog v-model="dialog" max-width="500px">
-					<v-card>
-						<v-card-title>
-							<span class="headline">{{ formTitle }}</span>
-						</v-card-title>
-
-						<v-card-text>
-							<v-container>
-								<v-row>
-									<v-col cols="12">
-										<v-text-field
-											v-model="editedItem.title"
-											label="Title"
-										></v-text-field>
-										<v-text-field
-											v-model="editedItem.description"
-											label="Description"
-										></v-text-field>
-										<v-text-field
-											v-model="editedItem.ingredients"
-											label="Ingredients"
-										></v-text-field>
-									</v-col>
-								</v-row>
-							</v-container>
-						</v-card-text>
-
-						<v-card-actions>
-							<v-spacer></v-spacer>
-							<v-btn color="blue darken-1" text @click="close"
-								>Cancel</v-btn
-							>
-							<v-btn color="blue darken-1" text @click="save"
-								>Save</v-btn
-							>
-						</v-card-actions>
-					</v-card>
-				</v-dialog>
 				<v-dialog v-model="dialogDelete" max-width="500px">
 					<v-card>
 						<v-card-title class="headline"
@@ -75,54 +37,101 @@
 					:headers="headers"
 					:items="recipes"
 					:search="search"
-					:server-items-length="totalRecipes"
+					:server-items-length="pagination.total"
+					:page.sync="pagination.currentPage"
+					:items-per-page="pagination.perPage"
 					:loading="loading"
 					class="elevation-1"
+					@page-count="pagination.pageCount = $event"
+					hide-default-footer
 				>
+					<template v-slot:[`item.isActive`]="{ item }">
+						<v-checkbox disabled v-model="item.isActive" />
+					</template>
+					<template v-slot:[`item.isBanned`]="{ item }">
+						<v-checkbox disabled v-model="item.isBanned" />
+					</template>
 					<template v-slot:top>
 						<v-toolbar flat color="white">
 							<v-toolbar-title>Recipes</v-toolbar-title>
 							<v-divider class="mx-4" inset vertical></v-divider>
 							<v-spacer></v-spacer>
-							<v-text-field
-								v-model="search"
-								append-icon="fas fa-search"
-								label="Search"
-								single-line
-								hide-details
-							></v-text-field>
+							<div class="col-md-4">
+								<v-text-field
+									v-model="search"
+									append-icon="fas fa-search"
+									label="Search"
+									single-line
+									hide-details
+								></v-text-field>
+							</div>
+							<div>
+								<v-btn
+									color="indigo"
+									dark
+									class="ml-3"
+									@click="getRecipes()"
+								>
+									<span>Search</span>
+								</v-btn>
+							</div>
 						</v-toolbar>
-						<v-alert v-if="alert" :type="alert.type">{{
-							alert.content
-						}}</v-alert>
 					</template>
 
 					<template v-slot:[`item.actions`]="{ item }">
 						<v-btn
-							class="mx-2"
-							small
-							depressed
-							fab
-							dark
-							color="green"
-							@click="editItem(item)"
-						>
-							<v-icon dark small>mdi-pencil</v-icon>
-						</v-btn>
-						<v-btn
+							v-if="item.isActive"
 							class="mx-2"
 							small
 							depressed
 							fab
 							dark
 							color="red"
-							@click="deleteItem(item)"
+							@click="deleteItem(item.id)"
 						>
 							<v-icon dark small>mdi-delete</v-icon>
 						</v-btn>
+						<v-btn
+							v-if="!item.isBanned"
+							class="mx-2"
+							small
+							depressed
+							fab
+							dark
+							color="orange"
+							@click="blockItem(item.id)"
+						>
+							<v-icon dark small>mdi-block-helper</v-icon>
+						</v-btn>
+						<v-btn
+							v-else
+							class="mx-2"
+							small
+							depressed
+							fab
+							dark
+							color="grey"
+							@click="unblockItem(item.id)"
+						>
+							<v-icon dark small>mdi-block-helper</v-icon>
+						</v-btn>
 					</template>
-					<template v-slot:no-data>NO DATA</template>
 				</v-data-table>
+				<div
+					class="text-center pt-2 d-flex justify-space-between align-center"
+				>
+					<v-pagination
+						v-model="pagination.currentPage"
+						:length="pagination.pageCount"
+					></v-pagination>
+					<div class="col-4">
+						<v-select
+							:items="pagination.perPageOptions"
+							v-model="pagination.perPage"
+							label="Items per page"
+						></v-select>
+					</div>
+				</div>
 			</v-card>
 		</v-col>
 	</v-container>
@@ -133,10 +142,16 @@ import SideMenu from "../../components/SideMenu";
 export default {
 	data() {
 		return {
-			dialog: false,
+			pagination: {
+				perPage: 5,
+				currentPage: 1,
+				perPageOptions: [5, 10, 25, 50],
+				total: 1,
+				pageCount: 1
+			},
 			dialogDelete: false,
+			toDeleteId: null,
 			loading: false,
-			alert: null,
 			search: "",
 			headers: [
 				{
@@ -154,116 +169,65 @@ export default {
 				{ text: "User", value: "user" },
 				{ text: "Actions", value: "actions", sortable: false }
 			],
-			recipes: [
-				{
-					id: 1,
-					title: "Title",
-					description: "asdasd",
-					calories: 100,
-					time: 160,
-					ingredients: ["jajko", "mleko"],
-					user: 1
-				},
-				{
-					id: 2,
-					title: "Title",
-					description: "asdasd",
-					calories: 100,
-					time: 160,
-					ingredients: ["jajko", "mleko"],
-					user: 1
-				}
-			],
-			totalRecipes: 0,
-			editedIndex: -1,
-			editedItem: {
-				name: "",
-				surname: 0,
-				date: 0,
-				mail: 0,
-				boolean: false
-			},
-			defaultItem: {
-				name: "",
-				surname: 0,
-				date: 0,
-				mail: 0,
-				boolean: false
-			}
+			recipes: []
 		};
 	},
 	components: { SideMenu },
 	computed: {
-		formTitle() {
-			return this.editedIndex === -1 ? "New Item" : "Edit Item";
+		perPage() {
+			return this.pagination.perPage;
+		},
+		currentPage() {
+			return this.pagination.currentPage;
 		}
 	},
-
 	watch: {
-		dialog(val) {
-			val || this.close();
-		},
 		dialogDelete(val) {
 			val || this.closeDelete();
+		},
+		currentPage() {
+			this.getRecipes();
+		},
+		perPage() {
+			this.getRecipes();
 		}
 	},
-
 	created() {
 		this.getRecipes();
 	},
 
 	methods: {
-		editItem(item) {
-			this.editedIndex = this.recipes.indexOf(item);
-			this.editedItem = Object.assign({}, item);
-			this.dialog = true;
-		},
-
 		deleteItem(item) {
-			this.editedIndex = this.recipes.indexOf(item);
-			this.editedItem = Object.assign({}, item);
+			this.toDeleteId = item.id;
 			this.dialogDelete = true;
 		},
 
-		deleteItemConfirm() {
-			this.recipes.splice(this.editedIndex, 1);
-			this.closeDelete();
-		},
-
-		close() {
-			this.dialog = false;
-			this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem);
-				this.editedIndex = -1;
-			});
+		async deleteItemConfirm() {
+			const result = await this.$recipe.deleteRecipe(this.toDeleteId);
+			if (result.success) {
+				this.getRecipes();
+				this.closeDelete();
+			}
 		},
 
 		closeDelete() {
 			this.dialogDelete = false;
 			this.$nextTick(() => {
-				this.editedItem = Object.assign({}, this.defaultItem);
-				this.editedIndex = -1;
+				this.toDeleteId = null;
 			});
 		},
-
-		save() {
-			if (this.editedIndex > -1) {
-				Object.assign(this.recipes[this.editedIndex], this.editedItem);
-			} else {
-				this.recipes.push(this.editedItem);
-			}
-			this.close();
-		},
 		async getRecipes() {
-			console.log("hejka");
+			this.loading = true;
 			const result = await this.$recipe.getRecipes({
-				page: 1,
-				pageSize: 10
+				page: this.pagination.currentPage,
+				pageSize: this.pagination.perPage,
+				searchQuery: this.search
 			});
 			if (result.success) {
 				this.recipe = result.data.results;
-				this.totalRecipes = result.data.count;
+				this.pagination.total = result.data.count;
 			}
+			this.loading = false;
 		}
 	}
 };

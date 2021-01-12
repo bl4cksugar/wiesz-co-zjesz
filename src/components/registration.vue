@@ -39,6 +39,7 @@
 							background-color="rgba(255, 255, 255, 0.9)"
 							color="grey"
 							outlined
+							:rules="[rules.required]"
 							v-model="nickname"
 							label="Nickname"
 						></v-text-field>

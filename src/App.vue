@@ -7,7 +7,7 @@
 					<router-view> </router-view>
 				</div>
 			</div>
-			<add-recipe></add-recipe>
+			<add-recipe v-if="isLogged"></add-recipe>
 		</v-container>
 		<b-footer></b-footer>
 
@@ -49,7 +49,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(["notification"])
+		...mapGetters(["notification", "isLogged"])
 	},
 	components: {
 		NavBar,

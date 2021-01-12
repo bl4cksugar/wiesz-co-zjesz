@@ -32,6 +32,7 @@
 						<v-text-field
 							v-model="title"
 							:rules="[rules.max]"
+							solo
 							counter="25"
 							hint="Type title of recipe"
 						></v-text-field>
@@ -42,83 +43,50 @@
 							:rules="[rules.required]"
 							label="describe the preparation method"
 							solo
-							required
 							name="input-7-4"
 						></v-textarea>
 						<h3>Upload picture</h3>
 
-						<label>
-							File
-							<input type="file" @change="onFileChanged" />
-						</label>
-
-						<v-btn @click="onUpload" :disable="!valid" small
-							>send</v-btn
-						>
+						<v-file-input
+							accept="image/png, image/jpeg"
+							label="File input"
+							show-size
+							solo
+							prepend-icon="mdi-camera"
+							:rules="[rules.maxSize]"
+							counter
+						></v-file-input>
 
 						<br />
 						<h3>Ingredients</h3>
-
 						<v-autocomplete
-							flat
+							v-model="pickedIngredients"
+							:items="ingredients"
 							chips
-							v-model="pickedIngridients"
-							multiple
-							outlined
-							label="Find ingridients"
+							small-chips
+							deletable-chips
+							solo
 							item-text="name"
 							item-value="id"
-							:items="ingridients"
-						>
-							<template v-slot:selection="data">
-								<v-chip
-									v-bind="data.attrs"
-									:input-value="data.selected"
-									close
-									@click="data.select"
-									@click:close="remove(data.item)"
-								>
-									<v-avatar left>
-										<v-img :src="data.item.imgUrl"></v-img>
-									</v-avatar>
-									{{ data.item.name }}
-								</v-chip>
-							</template>
-							<template v-slot:item="data">
-								<template v-if="typeof data.item !== 'object'">
-									<v-list-item-content
-										v-text="data.item"
-									></v-list-item-content>
-								</template>
-								<template v-else>
-									<v-list-item-avatar>
-										<img :src="data.item.imgUrl" />
-									</v-list-item-avatar>
-									<v-list-item-content>
-										<v-list-item-title
-											v-html="data.item.name"
-										></v-list-item-title>
-									</v-list-item-content>
-								</template>
-							</template>
-						</v-autocomplete>
+							multiple
+						></v-autocomplete>
 						<div
-							v-for="ingredientId in pickedIngridients"
-							:key="ingredientId"
+							v-for="ingredient in recipeIngredients"
+							:key="ingredient.id"
 							class="d-flex flex-row align-items-center justify-content-center"
 						>
 							<v-text-field
-								:value="ingredientId"
-								flat
+								:value="ingredient.name"
 								disabled
+								solo
 								type="text"
 								class="pr-5"
 							></v-text-field>
 							<v-text-field
-								v-model="ingredientId.quantity"
-								flat
+								v-model="ingredient.quantity"
 								prepend-inner-icon="mdi-calculator"
 								:rules="[rules.number]"
+								solo
 								type="number"
 								min="0"
 								suffix="g"
@@ -132,31 +100,17 @@
 							<add-ingredient></add-ingredient>
 						</div>
 						<div class="d-flex flex-column flex-md-row">
-							<!-- <div class="col-12 col-md-6 py-0 px-0 pr-md-2">
-								<h3>Calories</h3>
-								<v-text-field
-									v-model="calories"
-									flat
-									prepend-inner-icon="mdi-calculator"
-									:rules="[rules.number]"
-									type="number"
-									min="0"
-									suffix="kcal"
-									outlined
-								></v-text-field>
-							</div> -->
-							<div class="col-12 col-md-6 py-0 px-0 pl-md-2">
+							<div class="col-12 py-0 px-0 pl-md-2">
 								<h3>Preparing time</h3>
 								<v-text-field
 									v-model="time"
 									prepend-inner-icon="mdi-clock-time-eight"
-									flat
 									:rules="[rules.number]"
+									solo
 									type="number"
 									min="0"
 									suffix="minutes"
 									label="Preparing Time"
-									outlined
 								></v-text-field>
 							</div>
 						</div>
@@ -190,36 +144,40 @@ export default {
 			description: "",
 			calories: "",
 			time: 1,
-			valid: null,
-			ingridients: [
+			valid: true,
+			ingredients: [
 				{
 					id: 1,
 					name: "egg",
-					imgUrl: "https://picsum.photos/200",
 					quantity: 1
 				},
-				{ name: "milk", imgUrl: "https://picsum.photos/200" },
-				{ name: "chicken", imgUrl: "https://picsum.photos/200" },
-				{ name: "pork", imgUrl: "https://picsum.photos/200" },
-				{ name: "bread", imgUrl: "https://picsum.photos/200" },
-				{ name: "salat", imgUrl: "https://picsum.photos/200" }
+				{ id: 2, name: "milk", quantity: 1 },
+				{ id: 3, name: "chicken", quantity: 1 },
+				{ id: 4, name: "pork", quantity: 1 },
+				{ id: 5, name: "bread", quantity: 1 },
+				{ id: 6, name: "salat", quantity: 1 }
 			],
-			pickedIngridients: [],
-			dialog: true
+			pickedIngredients: [],
+			recipeIngredients: [],
+			dialog: false
 		};
+	},
+	watch: {
+		pickedIngredients: {
+			deep: true,
+			handler(newVal) {
+				this.recipeIngredients = newVal.map((item) =>
+					this.ingredients.find((element) => element.id === item)
+				);
+			}
+		}
 	},
 	mixins: [validation],
 	methods: {
 		...mapActions(["setNotification"]),
 		remove(item) {
-			const index = this.pickedIngridients.indexOf(item.name);
-			if (index >= 0) this.pickedIngridients.splice(index, 1);
-		},
-		onFileChanged(e) {
-			console.log(e);
-		},
-		onUpload(e) {
-			console.log(e);
+			const index = this.pickedIngredients.indexOf(item.name);
+			if (index >= 0) this.pickedIngredients.splice(index, 1);
 		},
 		close() {
 			this.dialog = false;
