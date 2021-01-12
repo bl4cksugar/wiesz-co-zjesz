@@ -72,18 +72,10 @@
 					class="elevation-1"
 				>
 					<template v-slot:[`item.isActive`]="{ item }">
-						<v-simple-checkbox>{{
-							item.isActive
-								? "mdi-checkbox-marked"
-								: "mdi-checkbox-blank-outline"
-						}}</v-simple-checkbox>
+						<v-checkbox disabled v-model="item.isActive" />
 					</template>
 					<template v-slot:[`item.isBanned`]="{ item }">
-						<v-simple-checkbox>{{
-							item.isBanned
-								? "mdi-checkbox-marked"
-								: "mdi-checkbox-blank-outline"
-						}}</v-simple-checkbox>
+						<v-checkbox disabled v-model="item.isBanned" />
 					</template>
 					<template v-slot:top>
 						<v-toolbar flat color="white">
@@ -111,7 +103,7 @@
 							fab
 							dark
 							color="green"
-							@click="editItem(item)"
+							@click="editItem(item.id)"
 						>
 							<v-icon dark small>mdi-pencil</v-icon>
 						</v-btn>
@@ -122,18 +114,31 @@
 							fab
 							dark
 							color="red"
-							@click="deleteItem(item)"
+							@click="deleteItem(item.id)"
 						>
 							<v-icon dark small>mdi-delete</v-icon>
 						</v-btn>
 						<v-btn
+							v-if="!item.isBanned"
 							class="mx-2"
 							small
 							depressed
 							fab
 							dark
 							color="orange"
-							@click="blockItem(item)"
+							@click="blockItem(item.id)"
+						>
+							<v-icon dark small>mdi-block-helper</v-icon>
+						</v-btn>
+						<v-btn
+							v-else
+							class="mx-2"
+							small
+							depressed
+							fab
+							dark
+							color="grey"
+							@click="unblockItem(item.id)"
 						>
 							<v-icon dark small>mdi-block-helper</v-icon>
 						</v-btn>
@@ -155,7 +160,6 @@ export default {
 			loading: false,
 			alert: null,
 			search: "",
-
 			headers: [
 				{
 					text: "ID",
@@ -171,17 +175,8 @@ export default {
 				{ text: "isBanned", value: "isBanned" },
 				{ text: "Actions", value: "actions", sortable: false }
 			],
-			users: [
-				{
-					id: 1,
-					nickname: "janek12",
-					email: "janek12@example.com",
-					iActive: true,
-					isBanned: true,
-					user: 2
-				}
-			],
-			totalUsers: 1,
+			users: [],
+			totalUsers: 0,
 			editedIndex: -1,
 			editedItem: {
 				nickname: "",
@@ -204,6 +199,9 @@ export default {
 		}
 	},
 
+	created() {
+		this.getUsers();
+	},
 	watch: {
 		dialog(val) {
 			val || this.close();
@@ -213,9 +211,22 @@ export default {
 		}
 	},
 
-	created() {},
-
 	methods: {
+		async blockItem(id) {
+			console.log("hejka");
+			const result = await this.$user.banUser(id);
+			if (result.success) {
+				this.getUsers();
+			}
+		},
+		async unblockItem(id) {
+			console.log("hejka");
+			const result = await this.$user.unbanUser(id);
+			if (result.success) {
+				this.getUsers();
+			}
+		},
+
 		editItem(item) {
 			this.editedIndex = this.users.indexOf(item);
 			this.editedItem = Object.assign({}, item);
@@ -256,6 +267,18 @@ export default {
 				this.users.push(this.editedItem);
 			}
 			this.close();
+		},
+
+		async getUsers() {
+			console.log("hejka");
+			const result = await this.$user.getUsers({
+				page: 1,
+				pageSize: 10
+			});
+			if (result.success) {
+				this.users = result.data.results;
+				this.totalUsers = result.data.count;
+			}
 		}
 	}
 };

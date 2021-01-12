@@ -40,22 +40,26 @@ export default {
 	},
 	data() {
 		return {
-			recipes: [
-				{ id: 1, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 2, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 3, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 4, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 5, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 6, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 7, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 8, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 9, title: "test", img: "", calories: 0, time: 0 }
-			]
+			recipes: []
 		};
+	},
+
+	created() {
+		this.getRecipes();
 	},
 	methods: {
 		findRecipe(searchConfig) {
 			console.log(searchConfig);
+		},
+
+		async getRecipes() {
+			const result = await this.$recipe.getRecipes({
+				page: 1,
+				pageSize: 9
+			});
+			if (result.success) {
+				this.recipes = result.data.results;
+			}
 		}
 	}
 };

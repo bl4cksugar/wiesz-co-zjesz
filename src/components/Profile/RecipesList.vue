@@ -9,16 +9,16 @@
 					></v-img>
 
 					<v-card-title>
-						Top western road trips
+						{title}
 					</v-card-title>
 
 					<v-card-subtitle>
-						1,000 miles of wonder
+						{calories}
 					</v-card-subtitle>
 
 					<v-card-actions>
 						<v-btn color="orange lighten-2" text>
-							Explore
+							Check
 						</v-btn>
 
 						<v-spacer></v-spacer>
@@ -55,17 +55,23 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import validation from "../../mixins/validation";
 export default {
 	components: {},
 	data() {
 		return {
 			show: false,
-			recipes: [
-				{ id: 1, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 2, title: "test", img: "", calories: 0, time: 0 },
-				{ id: 3, title: "test", img: "", calories: 0, time: 0 }
-			]
+			recipes: []
 		};
+	},
+	mixins: [validation],
+	methods: {
+		...mapActions(["setNotification"]),
+
+		close() {
+			this.dialog = false;
+		}
 	}
 };
 </script>

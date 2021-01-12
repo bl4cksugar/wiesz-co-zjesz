@@ -101,7 +101,7 @@
 							</template>
 						</v-autocomplete> -->
 						<div class="d-flex flex-column flex-md-row">
-							<div class="col-12 col-md-6 py-0 px-0 pr-md-2">
+							<!-- <div class="col-12 col-md-6 py-0 px-0 pr-md-2">
 								<h3>Calories</h3>
 								<v-text-field
 									v-model="calories"
@@ -113,7 +113,7 @@
 									suffix="kcal"
 									outlined
 								></v-text-field>
-							</div>
+							</div> -->
 							<div class="col-12 col-md-6 py-0 px-0 pl-md-2">
 								<h3>Preparing time</h3>
 								<v-text-field
@@ -134,10 +134,10 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-spacer></v-spacer>
-				<v-btn color="blue darken-1" text @click="dialog = false">
+				<v-btn color="blue darken-1" text @click="close = false">
 					Close
 				</v-btn>
-				<v-btn color="blue darken-1" text @click="dialog = false">
+				<v-btn color="blue darken-1" text @click="save">
 					Save
 				</v-btn>
 			</v-card-actions>
@@ -145,14 +145,16 @@
 	</v-dialog>
 </template>
 <script>
+import { mapActions } from "vuex";
 import validation from "../mixins/validation";
+
 export default {
 	data() {
 		return {
 			title: "",
 			description: "",
 			calories: "",
-			time: "",
+			time: 1,
 			valid: null,
 			ingridients: [
 				{ name: "egg", imgUrl: "https://picsum.photos/200" },
@@ -168,6 +170,7 @@ export default {
 	},
 	mixins: [validation],
 	methods: {
+		...mapActions(["setNotification"]),
 		remove(item) {
 			const index = this.pickedIngridients.indexOf(item.name);
 			if (index >= 0) this.pickedIngridients.splice(index, 1);
@@ -177,6 +180,32 @@ export default {
 		},
 		onUpload(e) {
 			console.log(e);
+		},
+		close() {
+			this.dialog = false;
+		},
+		async save() {
+			console.log("dupa");
+			const result = await this.$recipe.addRecipe({
+				title: this.title,
+				description: this.description,
+				preparingTime: this.time,
+
+				ingredients: [
+					{
+						ingredient: this.ingredients
+					}
+				]
+			});
+			if (result.success) {
+				this.dialog = false;
+				console.log("dupa");
+			} else {
+				this.setNotification({
+					message: result.errors.message,
+					color: "red"
+				});
+			}
 		}
 	}
 };
