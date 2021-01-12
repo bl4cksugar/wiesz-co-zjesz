@@ -174,7 +174,7 @@ export default {
 					user: 1
 				}
 			],
-			totalRecipes: 2,
+			totalRecipes: 0,
 			editedIndex: -1,
 			editedItem: {
 				name: "",
@@ -208,7 +208,9 @@ export default {
 		}
 	},
 
-	created() {},
+	created() {
+		this.getRecipes();
+	},
 
 	methods: {
 		editItem(item) {
@@ -251,6 +253,17 @@ export default {
 				this.recipes.push(this.editedItem);
 			}
 			this.close();
+		},
+		async getRecipes() {
+			console.log("hejka");
+			const result = await this.$recipe.getRecipes({
+				page: 1,
+				pageSize: 10
+			});
+			if (result.success) {
+				this.recipe = result.data.results;
+				this.totalRecipes = result.data.count;
+			}
 		}
 	}
 };

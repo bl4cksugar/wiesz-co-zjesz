@@ -57,10 +57,10 @@
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
-					<v-btn color="blue darken-1" text @click="dialog = false">
+					<v-btn color="blue darken-1" text @click="close">
 						Close
 					</v-btn>
-					<v-btn color="blue darken-1" text @click="dialog = false">
+					<v-btn color="blue darken-1" text @click="save">
 						Save
 					</v-btn>
 				</v-card-actions>
@@ -77,20 +77,46 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import validation from "../../mixins/validation";
+
 export default {
 	data() {
 		return {
 			weight: 100,
 			height: 100,
 			radioGroup: 1,
-			age: 0,
+			age: 1,
 			dialog: false,
 			genders: ["male", "female"]
 		};
 	},
+	mixins: [validation],
 	methods: {
+		...mapActions(["setNotification"]),
 		calculate(item) {
 			console.log("test", item);
+		},
+
+		close() {
+			this.dialog = false;
+		},
+		async save() {
+			const result = await this.$profile.editProfile({
+				height: this.height,
+				weight: this.weight,
+				isMale: this.radioGroup !== 1,
+				age: +this.age
+			});
+			if (result.success) {
+				this.dialog = false;
+				console.log("dupa");
+			} else {
+				this.setNotification({
+					message: result.errors.message,
+					color: "red"
+				});
+			}
 		}
 	}
 };
