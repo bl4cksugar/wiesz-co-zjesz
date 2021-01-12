@@ -80,7 +80,6 @@
 
 					<template v-slot:[`item.actions`]="{ item }">
 						<v-btn
-							v-if="item.isActive"
 							class="mx-2"
 							small
 							depressed
@@ -90,30 +89,6 @@
 							@click="deleteItem(item.id)"
 						>
 							<v-icon dark small>mdi-delete</v-icon>
-						</v-btn>
-						<v-btn
-							v-if="!item.isBanned"
-							class="mx-2"
-							small
-							depressed
-							fab
-							dark
-							color="orange"
-							@click="blockItem(item.id)"
-						>
-							<v-icon dark small>mdi-block-helper</v-icon>
-						</v-btn>
-						<v-btn
-							v-else
-							class="mx-2"
-							small
-							depressed
-							fab
-							dark
-							color="grey"
-							@click="unblockItem(item.id)"
-						>
-							<v-icon dark small>mdi-block-helper</v-icon>
 						</v-btn>
 					</template>
 				</v-data-table>
@@ -158,14 +133,11 @@ export default {
 					text: "ID",
 					align: "left",
 					sortable: false,
-
 					value: "id"
 				},
 
-				{ text: "Nickname", value: "nickname", sortable: false },
-				{ text: "Email", value: "email", sortable: false },
-				{ text: "IsActive", value: "isActive", sortable: false },
-				{ text: "IsBanned", value: "isBanned", sortable: false },
+				{ text: "Title", value: "title", sortable: false },
+				{ text: "Calories", value: "calories", sortable: false },
 				{ text: "Actions", value: "actions", sortable: false }
 			],
 			ingredients: []
@@ -198,6 +170,7 @@ export default {
 
 	methods: {
 		deleteItem(item) {
+			console.log(item);
 			this.toDeleteId = item.id;
 			this.dialogDelete = true;
 		},
