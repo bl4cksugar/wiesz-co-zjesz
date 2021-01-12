@@ -1,18 +1,20 @@
-<template
-	><v-dialog v-model="dialog" max-width="600px">
+<template>
+	<v-dialog v-model="dialog" max-width="600px">
 		<template v-slot:activator="{ on, attrs }">
-			<v-btn
-				v-bind="attrs"
-				v-on="on"
-				color="indigo"
-				fab
-				bottom
-				dark
-				fixed
-				right
-			>
-				<v-icon>mdi-plus</v-icon>
-			</v-btn>
+			<v-fab-transition>
+				<v-btn
+					v-bind="attrs"
+					v-on="on"
+					color="#3f51b5"
+					dark
+					fixed
+					bottom
+					right
+					fab
+				>
+					<v-icon>mdi-plus</v-icon>
+				</v-btn>
+			</v-fab-transition>
 		</template>
 		<v-card>
 			<v-card-title>
@@ -55,9 +57,9 @@
 						>
 
 						<br />
-						<h3>List of ingredients</h3>
+						<h3>Ingredients</h3>
 
-						<!-- <v-autocomplete
+						<v-autocomplete
 							flat
 							chips
 							v-model="pickedIngridients"
@@ -65,7 +67,7 @@
 							outlined
 							label="Find ingridients"
 							item-text="name"
-							item-value="name"
+							item-value="id"
 							:items="ingridients"
 						>
 							<template v-slot:selection="data">
@@ -99,7 +101,36 @@
 									</v-list-item-content>
 								</template>
 							</template>
-						</v-autocomplete> -->
+						</v-autocomplete>
+						<div
+							v-for="ingredientId in pickedIngridients"
+							:key="ingredientId"
+							class="d-flex flex-row align-items-center justify-content-center"
+						>
+							<v-text-field
+								:value="ingredientId"
+								flat
+								disabled
+								type="text"
+								class="pr-5"
+							></v-text-field>
+							<v-text-field
+								v-model="ingredientId.quantity"
+								flat
+								prepend-inner-icon="mdi-calculator"
+								:rules="[rules.number]"
+								type="number"
+								min="0"
+								suffix="g"
+							></v-text-field>
+						</div>
+						<div class="col-12 d-flex justify-center flex-column">
+							<small>
+								Can't see the ingredient you are using in your
+								recipe? Add it!
+							</small>
+							<add-ingredient></add-ingredient>
+						</div>
 						<div class="d-flex flex-column flex-md-row">
 							<div class="col-12 col-md-6 py-0 px-0 pr-md-2">
 								<h3>Calories</h3>
@@ -146,7 +177,11 @@
 </template>
 <script>
 import validation from "../mixins/validation";
+import AddIngredient from "./Ingredients/AddIngredient.vue";
 export default {
+	components: {
+		AddIngredient
+	},
 	data() {
 		return {
 			title: "",
@@ -155,7 +190,12 @@ export default {
 			time: "",
 			valid: null,
 			ingridients: [
-				{ name: "egg", imgUrl: "https://picsum.photos/200" },
+				{
+					id: 1,
+					name: "egg",
+					imgUrl: "https://picsum.photos/200",
+					quantity: 1
+				},
 				{ name: "milk", imgUrl: "https://picsum.photos/200" },
 				{ name: "chicken", imgUrl: "https://picsum.photos/200" },
 				{ name: "pork", imgUrl: "https://picsum.photos/200" },
@@ -163,7 +203,7 @@ export default {
 				{ name: "salat", imgUrl: "https://picsum.photos/200" }
 			],
 			pickedIngridients: [],
-			dialog: false
+			dialog: true
 		};
 	},
 	mixins: [validation],

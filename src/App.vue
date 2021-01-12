@@ -7,6 +7,7 @@
 					<router-view> </router-view>
 				</div>
 			</div>
+			<add-recipe></add-recipe>
 		</v-container>
 		<b-footer></b-footer>
 
@@ -32,7 +33,7 @@
 <script>
 import NavBar from "./components/NavBar";
 import BFooter from "./components/Footer";
-
+import AddRecipe from "./components/AddRecipe";
 import { mapGetters } from "vuex";
 
 export default {
@@ -52,7 +53,8 @@ export default {
 	},
 	components: {
 		NavBar,
-		BFooter
+		BFooter,
+		AddRecipe
 	},
 	watch: {
 		notification(newVal) {

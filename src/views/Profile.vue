@@ -65,7 +65,6 @@
 import Ppm from "../components/Profile/Ppm";
 import RecipesList from "../components/Profile/RecipesList";
 import DeleteModal from "../components/Profile/DeleteModal.vue";
-import AddRecipe from "../components/AddRecipe";
 
 export default {
 	name: "Profile",
@@ -79,8 +78,7 @@ export default {
 	components: {
 		RecipesList,
 		Ppm,
-		DeleteModal,
-		AddRecipe
+		DeleteModal
 	}
 };
 </script>
