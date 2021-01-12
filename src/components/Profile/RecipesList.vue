@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column justify-center">
 		<v-row class="d-flex flex-row">
-			<div v-for="n in 9" :key="n" class="col-4">
+			<div v-for="n in 9" :key="n" class="col-12 col-md-6 col-lg-4">
 				<v-card class=" ma-2">
 					<v-img
 						src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"

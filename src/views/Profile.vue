@@ -2,9 +2,9 @@
 	<v-container
 		class="profile-page d-flex justify-center align-center flex-column"
 	>
-		<div class="d-flex col-10 col-md-6 flex-row">
+		<div class="d-flex col-10 col-md-6 flex-column flex-md-row">
 			<div class="col-12 col-md-4 d-flex align-center justify-center">
-				<v-avatar color="indigo" width="150px" height="150px"
+				<v-avatar color="indigo" class="profileAvatar"
 					><v-icon dark>
 						mdi-account-circle
 					</v-icon></v-avatar
@@ -25,21 +25,19 @@
 						{{ `${ppm} kcal` }}
 					</small>
 				</div>
-				<div class="d-flex">
+				<div class="d-flex flex-column flex-md-row">
 					<ppm class="mx-2"></ppm>
 					<delete-modal class="mx-2"></delete-modal>
 				</div>
 			</div>
 		</div>
-		<div class="d-flex col-10 flex-column justify-center align-center">
+		<div class="d-flex col-12 flex-column justify-center align-center">
 			<v-tabs
 				v-model="tab"
 				color="indigo accent-4"
-				centered
+				class="d-flex justify-center"
 				icons-and-text
 			>
-				<v-tabs-slider></v-tabs-slider>
-
 				<v-tab href="#tab-1">
 					My Recipes
 					<v-icon>mdi-silverware-fork-knife</v-icon>
@@ -50,7 +48,7 @@
 					<v-icon>mdi-heart</v-icon>
 				</v-tab>
 			</v-tabs>
-			<div class="col-10 col-md-6 d-flex row">
+			<div class="col-12 d-flex row">
 				<v-tabs-items v-model="tab">
 					<v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
 						<span style="font-family:Merriweather; font-size:30px;">
@@ -88,5 +86,9 @@ export default {
 .profile-page {
 	padding-top: 90px;
 	min-height: 85vh;
+}
+.profileAvatar {
+	min-width: 150px !important;
+	min-height: 150px !important;
 }
 </style>
