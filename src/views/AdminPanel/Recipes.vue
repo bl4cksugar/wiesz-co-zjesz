@@ -7,8 +7,8 @@
 		>
 			<side-menu></side-menu>
 		</v-col>
-		<v-col sm="10">
-			<v-card>
+		<v-col sm="10" style="min-height:100vh;">
+			<v-card class="data">
 				<v-dialog v-model="dialog" max-width="500px">
 					<v-card>
 						<v-card-title>
@@ -26,6 +26,10 @@
 										<v-text-field
 											v-model="editedItem.description"
 											label="Description"
+										></v-text-field>
+										<v-text-field
+											v-model="editedItem.ingredients"
+											label="Ingredients"
 										></v-text-field>
 									</v-col>
 								</v-row>
@@ -252,4 +256,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.data {
+	margin-top: 45px;
+}
+</style>
