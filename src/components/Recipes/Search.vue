@@ -117,9 +117,7 @@ export default {
 	mixins: [validation],
 	methods: {
 		remove(item) {
-			console.log("test", item);
 			const index = this.pickedIngridients.indexOf(item.name);
-			console.log(index);
 			if (index >= 0) this.pickedIngridients.splice(index, 1);
 		},
 		findRecipe() {

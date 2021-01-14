@@ -170,7 +170,6 @@ export default {
 
 	methods: {
 		deleteItem(item) {
-			console.log(item);
 			this.toDeleteId = item.id;
 			this.dialogDelete = true;
 		},

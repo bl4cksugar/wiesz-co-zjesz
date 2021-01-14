@@ -14,7 +14,8 @@ export default new Vuex.Store({
 		user: (state) => state.user,
 		notification: (state) => state.notification,
 		isLogged: (state) => !!state.user,
-		isAdmin: (state) => state.user?.role === "Admin"
+		isAdmin: (state) => state.user?.role === "Admin",
+		getUserId: (state) => +state.user.unique_name
 	},
 	mutations: {
 		storeUser(state, user) {

@@ -2,30 +2,29 @@ import requestSender from "../helpers/requestSender";
 
 export default function(Vue) {
 	(Vue.recipe = {
-		async editRecipe(id) {
-			const result = await requestSender.send({
-				method: "put",
-				url: `/recipes/${+id}`
-			});
-			return result;
-		},
-
-		async deleteRecipe(request) {
+		async editRecipe(id, request) {
 			const result = await requestSender.send(
 				{
-					method: "delete",
-					url: `/recipes/{id}`
+					method: "put",
+					url: `/recipes/${+id}`
 				},
 				request
 			);
 			return result;
 		},
 
-		async getRecipe(query) {
+		async deleteRecipe(id) {
+			const result = await requestSender.send({
+				method: "delete",
+				url: `/recipes/${+id}`
+			});
+			return result;
+		},
+
+		async getRecipe(id) {
 			const result = await requestSender.send({
 				method: "get",
-				url: `/recipes/{id}`,
-				params: query
+				url: `/recipes/${id}`
 			});
 			return result;
 		},

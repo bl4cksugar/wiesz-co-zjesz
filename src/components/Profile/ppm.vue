@@ -110,7 +110,6 @@ export default {
 			});
 			if (result.success) {
 				this.dialog = false;
-				console.log("dupa");
 			} else {
 				this.setNotification({
 					message: result.errors.message,

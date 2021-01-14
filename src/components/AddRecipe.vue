@@ -183,7 +183,6 @@ export default {
 			this.dialog = false;
 		},
 		async save() {
-			console.log("dupa");
 			const result = await this.$recipe.addRecipe({
 				title: this.title,
 				description: this.description,
@@ -197,7 +196,6 @@ export default {
 			});
 			if (result.success) {
 				this.dialog = false;
-				console.log("dupa");
 			} else {
 				this.setNotification({
 					message: result.errors.message,

@@ -38,22 +38,25 @@
 				class="d-flex justify-center"
 				icons-and-text
 			>
-				<v-tab href="#tab-1">
-					My Recipes
-					<v-icon>mdi-silverware-fork-knife</v-icon>
-				</v-tab>
-
-				<v-tab href="#tab-2">
-					Favorites
-					<v-icon>mdi-heart</v-icon>
+				<v-tab
+					v-for="tab in titles"
+					:key="tab.id"
+					:href="`#tab-${tab.id}`"
+				>
+					{{ tab.title }}
+					<v-icon>{{ tab.icon }}</v-icon>
 				</v-tab>
 			</v-tabs>
 			<div class="col-12 d-flex row">
 				<v-tabs-items v-model="tab">
-					<v-tab-item v-for="i in 3" :key="i" :value="'tab-' + i">
+					<v-tab-item
+						v-for="tab in titles"
+						:key="tab.id"
+						:value="'tab-' + tab.id"
+					>
 						<span style="font-family:Merriweather; font-size:30px;">
 						</span>
-						<recipes-list></recipes-list>
+						<recipes-list :config="tab.config"></recipes-list>
 					</v-tab-item>
 				</v-tabs-items>
 			</div>
@@ -72,7 +75,20 @@ export default {
 		return {
 			ppm: 1630,
 			tab: null,
-			titles: ["My Recipes", "Favorite Recipes"]
+			titles: [
+				{
+					id: 1,
+					icon: "mdi-silverware-fork-knife",
+					title: "My Recipes",
+					config: { isMain: true, isFavorite: false }
+				},
+				{
+					id: 2,
+					icon: "mdi-heart",
+					title: "Favorite Recipes",
+					config: { isMain: false, isFavorite: true }
+				}
+			]
 		};
 	},
 	components: {

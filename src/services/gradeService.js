@@ -13,14 +13,11 @@ export default function(Vue) {
 			return result;
 		},
 
-		async deleteGrade(request) {
-			const result = await requestSender.send(
-				{
-					method: "delete",
-					url: `/grades/{id}`
-				},
-				request
-			);
+		async deleteGrade(id) {
+			const result = await requestSender.send({
+				method: "delete",
+				url: `/grades/${id}`
+			});
 			return result;
 		}
 	}),

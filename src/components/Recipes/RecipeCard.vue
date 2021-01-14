@@ -1,6 +1,7 @@
 <template>
 	<v-card @click="openRecipe">
 		<v-img
+			v-if="recipe.photo"
 			:src="`https://picsum.photos/500/300?image=${recipe.id * 19 + 16}`"
 			:lazy-src="
 				`https://picsum.photos/10/6?image=${recipe.id * 19 + 16}`
@@ -20,17 +21,37 @@
 		<v-card-title>
 			{{ recipe.title }}
 		</v-card-title>
-		<div class="d-flex ">
-			<v-card-subtitle class="d-flex justify-left">
-				Calories:{{ recipe.calories }} kcal
+		<v-card-text>
+			<v-row align="center" class="mx-0 d-flex flex-column">
+				<v-rating
+					:value="overall"
+					color="amber"
+					dense
+					half-increments
+					readonly
+					size="14"
+				></v-rating>
+
+				<div class="grey--text ml-4">
+					{{
+						`${overall ? overall : 0} (${
+							this.recipe.grades.length
+						})`
+					}}
+				</div>
+			</v-row>
+		</v-card-text>
+		<div class="d-flex flex-column">
+			<v-card-subtitle class="text-left py-1">
+				calories: {{ recipe.calories }} kcal
 			</v-card-subtitle>
-			<v-card-subtitle class="d-flex justify-left">
-				time:{{ recipe.time }} min
+			<v-card-subtitle class="text-left pt-0">
+				time: {{ recipe.preparingTime }} min
 			</v-card-subtitle>
 		</div>
 		<v-card-actions>
 			<v-btn color="orange lighten-2" class="font-weight-bold" text>
-				CHECK
+				MORE
 			</v-btn>
 		</v-card-actions>
 	</v-card>
@@ -48,9 +69,23 @@ export default {
 			show: false
 		};
 	},
+	computed: {
+		overall() {
+			let result = 0;
+			this.recipe.grades.forEach((item) => {
+				result += item.value;
+			});
+			return result / this.recipe.grades.length.toFixed(1);
+		}
+	},
 	methods: {
 		openRecipe() {
-			console.log(this.recipe.id);
+			this.$router.push({
+				name: "Recipe",
+				params: {
+					id: this.recipe.id
+				}
+			});
 		}
 	}
 };

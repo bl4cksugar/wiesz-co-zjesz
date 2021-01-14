@@ -6,6 +6,8 @@ import RecipesPanel from "../views/AdminPanel/Recipes.vue";
 import UsersPanel from "../views/AdminPanel/Users.vue";
 import Home from "../views/Home.vue";
 import Profile from "../views/Profile.vue";
+import Recipe from "../views/Recipe.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -18,6 +20,11 @@ const routes = [
 		path: "/profile",
 		name: "Profile",
 		component: Profile
+	},
+	{
+		path: "/recipe/:id",
+		name: "Recipe",
+		component: Recipe
 	},
 	{
 		path: "/admin/users",
