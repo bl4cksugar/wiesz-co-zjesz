@@ -12,7 +12,13 @@ export default function(Vue) {
 			);
 			return result;
 		},
-
+		async likeRecipe(id) {
+			const result = await requestSender.send({
+				method: "put",
+				url: `/recipes/like/${+id}`
+			});
+			return result;
+		},
 		async deleteRecipe(id) {
 			const result = await requestSender.send({
 				method: "delete",

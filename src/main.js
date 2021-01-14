@@ -3,6 +3,7 @@ import Vue from "vue";
 import VueAxios from "vue-axios";
 import VueCookies from "vue-cookies";
 import App from "./App.vue";
+import cookieHelper from "./helpers/cookieHelper";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import authorizationService from "./services/authorizationService";
@@ -27,11 +28,11 @@ Vue.use(userService);
 Vue.axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 Vue.axios.interceptors.request.use(
 	(config) => {
-		// const token = cookieHelper.getSessionCookie();
-		// if (1 === 1) {
-		config.headers.Authorization =
-			"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjUiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE2MTAxMzc5NDUsImV4cCI6MTYxMDc0Mjc0NSwiaWF0IjoxNjEwMTM3OTQ1fQ.83XU1gyHyGKNIemHJZJIH5oDibsWjB2zCtjEJ6hKZSE";
-		// }
+		const token = cookieHelper.getSessionCookie();
+		if (token) {
+			config.headers.Authorization =
+				"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjUiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE2MTAxMzc5NDUsImV4cCI6MTYxMDc0Mjc0NSwiaWF0IjoxNjEwMTM3OTQ1fQ.83XU1gyHyGKNIemHJZJIH5oDibsWjB2zCtjEJ6hKZSE";
+		}
 		return config;
 	},
 	(error) => Promise.reject(error)
