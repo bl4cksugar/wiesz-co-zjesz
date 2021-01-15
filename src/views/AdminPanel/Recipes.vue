@@ -80,7 +80,6 @@
 
 					<template v-slot:[`item.actions`]="{ item }">
 						<v-btn
-							v-if="item.isActive"
 							class="mx-2"
 							small
 							depressed
@@ -90,30 +89,6 @@
 							@click="deleteItem(item.id)"
 						>
 							<v-icon dark small>mdi-delete</v-icon>
-						</v-btn>
-						<v-btn
-							v-if="!item.isBanned"
-							class="mx-2"
-							small
-							depressed
-							fab
-							dark
-							color="orange"
-							@click="blockItem(item.id)"
-						>
-							<v-icon dark small>mdi-block-helper</v-icon>
-						</v-btn>
-						<v-btn
-							v-else
-							class="mx-2"
-							small
-							depressed
-							fab
-							dark
-							color="grey"
-							@click="unblockItem(item.id)"
-						>
-							<v-icon dark small>mdi-block-helper</v-icon>
 						</v-btn>
 					</template>
 				</v-data-table>
@@ -145,7 +120,7 @@ export default {
 			pagination: {
 				perPage: 5,
 				currentPage: 1,
-				perPageOptions: [5, 10, 25, 50],
+				perPageOptions: [5, 10],
 				total: 1,
 				pageCount: 1
 			},
@@ -162,11 +137,7 @@ export default {
 				},
 
 				{ text: "Title", value: "title" },
-				{ text: "Description", value: "description" },
-				{ text: "Calories", value: "calories" },
-				{ text: "Time", value: "time" },
-				{ text: "Ingredients", value: "ingredients" },
-				{ text: "User", value: "user" },
+				{ text: "User Email", value: "owner.email" },
 				{ text: "Actions", value: "actions", sortable: false }
 			],
 			recipes: []
@@ -198,7 +169,7 @@ export default {
 
 	methods: {
 		deleteItem(item) {
-			this.toDeleteId = item.id;
+			this.toDeleteId = item;
 			this.dialogDelete = true;
 		},
 
@@ -224,7 +195,7 @@ export default {
 				searchQuery: this.search
 			});
 			if (result.success) {
-				this.recipe = result.data.results;
+				this.recipes = result.data.results;
 				this.pagination.total = result.data.count;
 			}
 			this.loading = false;

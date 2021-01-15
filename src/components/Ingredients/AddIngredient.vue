@@ -72,11 +72,14 @@ export default {
 	methods: {
 		async addIngredient() {
 			const result = await this.$ingredient.addIngredient({
-				name: this.name,
+				title: this.name,
 				calories: +this.calories
 			});
 			if (result.success) {
 				this.dialog = false;
+				this.calories = 0;
+				this.name = "";
+				this.$emit("ingredientAdded");
 			} else {
 				this.setNotification({
 					message: result.errors.message,

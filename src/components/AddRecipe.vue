@@ -31,9 +31,7 @@
 					>
 						<v-text-field
 							v-model="title"
-							:rules="[rules.max]"
 							solo
-							counter="25"
 							hint="Type title of recipe"
 						></v-text-field>
 						<h3>Method of preparing</h3>
@@ -51,6 +49,7 @@
 							accept="image/png, image/jpeg"
 							label="File input"
 							show-size
+							@change="selectFile"
 							solo
 							prepend-icon="mdi-camera"
 							:rules="[rules.maxSize]"
@@ -66,7 +65,7 @@
 							small-chips
 							deletable-chips
 							solo
-							item-text="name"
+							item-text="title"
 							item-value="id"
 							multiple
 						></v-autocomplete>
@@ -76,7 +75,7 @@
 							class="d-flex flex-row align-items-center justify-content-center"
 						>
 							<v-text-field
-								:value="ingredient.name"
+								:value="ingredient.title"
 								disabled
 								solo
 								type="text"
@@ -97,7 +96,9 @@
 								Can't see the ingredient you are using in your
 								recipe? Add it!
 							</small>
-							<add-ingredient></add-ingredient>
+							<add-ingredient
+								@ingredientAdded="fetchIngredients"
+							></add-ingredient>
 						</div>
 						<div class="d-flex flex-column flex-md-row">
 							<div class="col-12 py-0 px-0 pl-md-2">
@@ -119,7 +120,7 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-spacer></v-spacer>
-				<v-btn color="blue darken-1" text @click="close = false">
+				<v-btn color="blue darken-1" text @click="dialog = false">
 					Close
 				</v-btn>
 				<v-btn color="blue darken-1" text @click="save">
@@ -145,6 +146,7 @@ export default {
 			calories: "",
 			time: 1,
 			valid: true,
+			photo: "",
 			ingredients: [
 				{
 					id: 1,
@@ -172,8 +174,14 @@ export default {
 			}
 		}
 	},
+	mounted() {
+		this.fetchIngredients();
+	},
 	mixins: [validation],
 	methods: {
+		selectFile(file) {
+			this.photo = file;
+		},
 		...mapActions(["setNotification"]),
 		remove(item) {
 			const index = this.pickedIngredients.indexOf(item.name);
@@ -182,16 +190,31 @@ export default {
 		close() {
 			this.dialog = false;
 		},
+		async fetchIngredients() {
+			const result = await this.$ingredient.getIngredients({
+				page: 1,
+				pageSize: 99999
+			});
+			if (result.success) this.ingredients = result.data.results;
+		},
 		async save() {
+			const file = new FormData();
+
+			file.append("photo", this.photo);
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			console.log(reader);
+
 			const result = await this.$recipe.addRecipe({
 				title: this.title,
 				description: this.description,
-				preparingTime: this.time,
-
+				preparingTime: +this.time,
+				photo: file,
 				ingredients: [
-					{
-						ingredient: this.ingredients
-					}
+					...this.recipeIngredients.map((item) => ({
+						ingredientId: item.id,
+						quantity: item.quantity
+					}))
 				]
 			});
 			if (result.success) {

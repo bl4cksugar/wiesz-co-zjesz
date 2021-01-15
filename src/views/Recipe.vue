@@ -4,6 +4,27 @@
 		class="profile-page d-flex justify-center align-center flex-column"
 	>
 		<div class="d-flex col-12 col-md-8 flex-column flex-md-row">
+			<v-dialog v-model="dialogDelete" max-width="500px">
+				<v-card>
+					<v-card-title class="headline"
+						>Are you sure you want to delete this
+						item?</v-card-title
+					>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="blue darken-1" text @click="closeDelete"
+							>Cancel</v-btn
+						>
+						<v-btn
+							color="blue darken-1"
+							text
+							@click="deleteItemConfirm"
+							>OK</v-btn
+						>
+						<v-spacer></v-spacer>
+					</v-card-actions>
+				</v-card>
+			</v-dialog>
 			<v-card style="width:100%" v-if="recipe !== null">
 				<div class="d-flex flex-column">
 					<div class="d-flex flex-column flex-md-row">
@@ -16,9 +37,33 @@
 							class="col-12 col-md-8 d-flex align-center justify-space-between flex-row flex-wrap flex-md-column"
 						>
 							<div>
-								<h2 style="font-family:Merriweather;">
-									{{ recipe.title }}
-								</h2>
+								<div class="d-flex align-center">
+									<h2 style="font-family:Merriweather;">
+										{{ recipe.title }}
+									</h2>
+									<v-btn
+										:disabled="loading"
+										v-if="isAuthor"
+										class="ma-2"
+										@click="editRecipe()"
+										text
+										icon
+										color="warning"
+									>
+										<v-icon>fas fa-edit</v-icon>
+									</v-btn>
+									<v-btn
+										:disabled="loading"
+										v-if="isAuthor || isAdmin"
+										class="ma-2"
+										@click="deleteItem()"
+										text
+										icon
+										color="red"
+									>
+										<v-icon>mdi-delete-forever</v-icon>
+									</v-btn>
+								</div>
 								<div class="d-flex">
 									<v-rating
 										v-if="canJudge"
@@ -223,6 +268,7 @@ export default {
 			recipe: null,
 			comment: "",
 			grade: 0,
+			dialogDelete: false,
 			titles: [
 				{
 					id: 1,
@@ -251,7 +297,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(["getUserId", "isLogged"]),
+		...mapGetters(["getUserId", "isLogged", "isAdmin"]),
 		overall() {
 			let result = 0;
 			this.recipe.grades.forEach((item) => {
@@ -266,6 +312,9 @@ export default {
 				) && this.isLogged
 			);
 		},
+		isAuthor() {
+			return this.recipe.ownerId === this.getUserId;
+		},
 		isLiked() {
 			return this.recipe.fans.find((item) => {
 				return item.user.id === this.getUserId;
@@ -277,6 +326,9 @@ export default {
 			if (newVal !== 0) {
 				this.addGrade();
 			}
+		},
+		dialogDelete(val) {
+			val || this.closeDelete();
 		}
 	},
 	methods: {
@@ -296,6 +348,8 @@ export default {
 			}
 			this.loading = false;
 		},
+		async removeRecipe() {},
+		async editRecipe() {},
 		async removeGrade() {
 			this.loading = true;
 			const grade = this.recipe.grades.find(
@@ -328,6 +382,21 @@ export default {
 			if (result.success) {
 				this.getRecipe(this.recipe.id);
 			}
+		},
+		deleteItem() {
+			this.dialogDelete = true;
+		},
+
+		async deleteItemConfirm() {
+			const result = await this.$recipe.deleteRecipe(this.recipe.id);
+			if (result.success) {
+				this.$router.back();
+			}
+		},
+
+		closeDelete() {
+			this.dialogDelete = false;
+			this.$nextTick(() => {});
 		}
 	},
 	mixins: [validation],

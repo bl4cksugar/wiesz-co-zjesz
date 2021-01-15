@@ -145,7 +145,7 @@ export default {
 			pagination: {
 				perPage: 5,
 				currentPage: 1,
-				perPageOptions: [5, 10, 25, 50],
+				perPageOptions: [5, 10],
 				total: 1,
 				pageCount: 1
 			},
@@ -162,7 +162,11 @@ export default {
 					value: "id"
 				},
 
-				{ text: "Nickname", value: "nickname", sortable: false },
+				{
+					text: "Nickname",
+					value: "profile.nickname",
+					sortable: false
+				},
 				{ text: "Email", value: "email", sortable: false },
 				{ text: "IsActive", value: "isActive", sortable: false },
 				{ text: "IsBanned", value: "isBanned", sortable: false },
@@ -211,11 +215,12 @@ export default {
 		},
 
 		deleteItem(item) {
-			this.toDeleteId = item.id;
+			this.toDeleteId = item;
 			this.dialogDelete = true;
 		},
 
 		async deleteItemConfirm() {
+			console.log(this.toDeleteId);
 			const result = await this.$user.deleteUser(this.toDeleteId);
 			if (result.success) {
 				this.getUsers();

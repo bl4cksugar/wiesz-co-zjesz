@@ -43,48 +43,21 @@
 				</div>
 			</div>
 			<v-autocomplete
-				flat
+				v-model="pickedIngredients"
+				:items="ingredients"
 				chips
-				v-model="pickedIngridients"
-				multiple
+				small-chips
+				deletable-chips
 				outlined
+				placeholder="Ingredients"
 				label="Find ingridients"
-				item-text="name"
-				item-value="name"
-				:items="ingridients"
+				item-text="title"
+				item-value="id"
+				multiple
+			></v-autocomplete>
+			<v-btn @click="clear" text color="red" rounded v-if="isFormFilled"
+				>Clear</v-btn
 			>
-				<template v-slot:selection="data">
-					<v-chip
-						v-bind="data.attrs"
-						:input-value="data.selected"
-						close
-						@click="data.select"
-						@click:close="remove(data.item)"
-					>
-						<v-avatar left>
-							<v-img :src="data.item.imgUrl"></v-img>
-						</v-avatar>
-						{{ data.item.name }}
-					</v-chip>
-				</template>
-				<template v-slot:item="data">
-					<template v-if="typeof data.item !== 'object'">
-						<v-list-item-content
-							v-text="data.item"
-						></v-list-item-content>
-					</template>
-					<template v-else>
-						<v-list-item-avatar>
-							<img :src="data.item.imgUrl" />
-						</v-list-item-avatar>
-						<v-list-item-content>
-							<v-list-item-title
-								v-html="data.item.name"
-							></v-list-item-title>
-						</v-list-item-content>
-					</template>
-				</template>
-			</v-autocomplete>
 			<v-btn
 				@click="findRecipe"
 				rounded
@@ -103,31 +76,51 @@ export default {
 			searchQuery: "",
 			calories: "",
 			time: "",
-			ingridients: [
-				{ name: "egg", imgUrl: "https://picsum.photos/200" },
-				{ name: "milk", imgUrl: "https://picsum.photos/200" },
-				{ name: "chicken", imgUrl: "https://picsum.photos/200" },
-				{ name: "pork", imgUrl: "https://picsum.photos/200" },
-				{ name: "bread", imgUrl: "https://picsum.photos/200" },
-				{ name: "salat", imgUrl: "https://picsum.photos/200" }
-			],
-			pickedIngridients: []
+			ingredients: [],
+			pickedIngredients: []
 		};
 	},
 	mixins: [validation],
 	methods: {
 		remove(item) {
-			const index = this.pickedIngridients.indexOf(item.name);
-			if (index >= 0) this.pickedIngridients.splice(index, 1);
+			const index = this.pickedIngredients.indexOf(item.name);
+			if (index >= 0) this.pickedIngredients.splice(index, 1);
 		},
 		findRecipe() {
 			this.$emit("dispatchFindRecipe", {
-				searchQuery: this.searchQuery,
-				calories: this.calories,
-				time: this.time,
-				pickedIngridients: this.pickedIngridients
+				searchQuery:
+					this.searchQuery.length > 0 ? this.searchQuery : null,
+				maxCalories: +this.calories,
+				maxPreparingTime: +this.time,
+				ingredients:
+					this.pickedIngredients.length > 0
+						? this.pickedIngredients
+						: []
 			});
+		},
+		clear() {
+			(this.searchQuery = ""),
+				(this.calories = ""),
+				(this.time = ""),
+				(this.pickedIngredients = []);
+			this.$emit("dispatchFindRecipe", {
+				searchQuery: null,
+				maxCalories: 0,
+				maxPreparingTime: 0,
+				ingredients: []
+			});
+		},
+		async fetchIngredients() {
+			const result = await this.$ingredient.getIngredients({
+				page: 1,
+				pageSize: 99999,
+				searchQuery: this.searchQuery
+			});
+			if (result.success) this.ingredients = result.data.results;
 		}
+	},
+	mounted() {
+		this.fetchIngredients();
 	},
 	computed: {
 		isFormFilled() {
@@ -135,7 +128,7 @@ export default {
 				this.searchQuery.length > 0 ||
 				this.calories > 0 ||
 				this.time > 0 ||
-				this.pickedIngridients.length > 0
+				this.pickedIngredients.length > 0
 			);
 		}
 	}

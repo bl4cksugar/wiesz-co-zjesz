@@ -5,7 +5,7 @@ const APP_DOMAIN =
 	process.env.VUE_APP_NODE_ENV === "prod" ? "wiesz-co-zjesz.github.io" : "";
 
 const defaultParams = {
-	expires: "2h"
+	expires: "7d"
 };
 
 export default {

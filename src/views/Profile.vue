@@ -22,7 +22,7 @@
 						style="font-family:Montserrat; "
 					>
 						<strong>my basic metabolism:</strong>
-						{{ `${ppm} kcal` }}
+						{{ `${user.ppm} kcal` }}
 					</small>
 				</div>
 				<div class="d-flex flex-column flex-md-row">
@@ -56,7 +56,10 @@
 					>
 						<span style="font-family:Merriweather; font-size:30px;">
 						</span>
-						<recipes-list :config="tab.config"></recipes-list>
+						<recipes-list
+							:config="tab.config"
+							:refresh="refresh"
+						></recipes-list>
 					</v-tab-item>
 				</v-tabs-items>
 			</div>
@@ -68,6 +71,7 @@
 import Ppm from "../components/Profile/Ppm";
 import RecipesList from "../components/Profile/RecipesList";
 import DeleteModal from "../components/Profile/DeleteModal.vue";
+import { mapGetters } from "vuex";
 
 export default {
 	name: "Profile",
@@ -88,8 +92,21 @@ export default {
 					title: "Favorite Recipes",
 					config: { isMain: false, isFavorite: true }
 				}
-			]
+			],
+			config: null,
+			refresh: false
 		};
+	},
+	watch: {
+		tab() {
+			this.refresh = !this.refresh;
+		}
+	},
+	created() {
+		this.config = this.titles[0].config;
+	},
+	computed: {
+		...mapGetters(["user"])
 	},
 	components: {
 		RecipesList,

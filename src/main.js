@@ -30,8 +30,7 @@ Vue.axios.interceptors.request.use(
 	(config) => {
 		const token = cookieHelper.getSessionCookie();
 		if (token) {
-			config.headers.Authorization =
-				"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjUiLCJyb2xlIjoiQWRtaW4iLCJuYmYiOjE2MTAxMzc5NDUsImV4cCI6MTYxMDc0Mjc0NSwiaWF0IjoxNjEwMTM3OTQ1fQ.83XU1gyHyGKNIemHJZJIH5oDibsWjB2zCtjEJ6hKZSE";
+			config.headers.Authorization = `Bearer ${token}`;
 		}
 		return config;
 	},

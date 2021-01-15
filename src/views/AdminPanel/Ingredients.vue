@@ -120,7 +120,7 @@ export default {
 			pagination: {
 				perPage: 5,
 				currentPage: 1,
-				perPageOptions: [5, 10, 25, 50],
+				perPageOptions: [5, 10],
 				total: 1,
 				pageCount: 1
 			},
@@ -170,7 +170,7 @@ export default {
 
 	methods: {
 		deleteItem(item) {
-			this.toDeleteId = item.id;
+			this.toDeleteId = item;
 			this.dialogDelete = true;
 		},
 
