@@ -15,7 +15,7 @@
 			>
 				<div>
 					<h2 style="font-family:Merriweather;">
-						John Doe
+						{{ user.nickname }}
 					</h2>
 					<small
 						class="text--secondary text-uppercase"
@@ -47,8 +47,8 @@
 					<v-icon>{{ tab.icon }}</v-icon>
 				</v-tab>
 			</v-tabs>
-			<div class="col-12 d-flex row">
-				<v-tabs-items v-model="tab">
+			<div class="col-10 col-md-8 d-flex flex-row">
+				<v-tabs-items v-model="tab" class="col-8">
 					<v-tab-item
 						v-for="tab in titles"
 						:key="tab.id"
@@ -84,13 +84,13 @@ export default {
 					id: 1,
 					icon: "mdi-silverware-fork-knife",
 					title: "My Recipes",
-					config: { isMain: true, isFavorite: false }
+					config: { isMine: true, isFavorite: false }
 				},
 				{
 					id: 2,
 					icon: "mdi-heart",
 					title: "Favorite Recipes",
-					config: { isMain: false, isFavorite: true }
+					config: { isMine: false, isFavorite: true }
 				}
 			],
 			config: null,

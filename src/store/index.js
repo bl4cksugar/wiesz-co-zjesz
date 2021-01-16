@@ -26,6 +26,9 @@ export default new Vuex.Store({
 		},
 		removeUser(state) {
 			state.user = null;
+		},
+		setPpm(state, value) {
+			state.user.ppm = value;
 		}
 	},
 	actions: {
@@ -44,6 +47,9 @@ export default new Vuex.Store({
 		destroySession({ commit }) {
 			commit("removeUser");
 			cookieHelper.deleteSessionCookie();
+		},
+		setPpm({ commit }, value) {
+			commit("setPpm", value.toFixed(0));
 		}
 	}
 });

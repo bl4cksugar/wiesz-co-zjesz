@@ -56,7 +56,7 @@
 							<v-toolbar-title>Ingredients</v-toolbar-title>
 							<v-divider class="mx-4" inset vertical></v-divider>
 							<v-spacer></v-spacer>
-							<div class="col-md-4">
+							<!-- <div class="col-md-4">
 								<v-text-field
 									v-model="search"
 									append-icon="fas fa-search"
@@ -74,7 +74,7 @@
 								>
 									<span>Search</span>
 								</v-btn>
-							</div>
+							</div> -->
 						</v-toolbar>
 					</template>
 

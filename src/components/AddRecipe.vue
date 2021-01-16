@@ -33,7 +33,9 @@
 							v-model="title"
 							solo
 							hint="Type title of recipe"
-						></v-text-field>
+							:rules="[rules.required]"
+						>
+						</v-text-field>
 						<h3>Method of preparing</h3>
 
 						<v-textarea
@@ -52,7 +54,7 @@
 							@change="selectFile"
 							solo
 							prepend-icon="mdi-camera"
-							:rules="[rules.maxSize]"
+							:rules="[rules.maxSize, rules.required]"
 							counter
 						></v-file-input>
 
@@ -65,8 +67,11 @@
 							small-chips
 							deletable-chips
 							solo
+							@click.native="openIngredients"
+							:search-input.sync="searchIngredient"
 							item-text="title"
 							item-value="id"
+							:rules="[rules.required]"
 							multiple
 						></v-autocomplete>
 						<div
@@ -84,7 +89,7 @@
 							<v-text-field
 								v-model="ingredient.quantity"
 								prepend-inner-icon="mdi-calculator"
-								:rules="[rules.number]"
+								:rules="[rules.number, rules.required]"
 								solo
 								type="number"
 								min="0"
@@ -106,7 +111,7 @@
 								<v-text-field
 									v-model="time"
 									prepend-inner-icon="mdi-clock-time-eight"
-									:rules="[rules.number]"
+									:rules="[rules.number, rules.required]"
 									solo
 									type="number"
 									min="0"
@@ -147,18 +152,8 @@ export default {
 			time: 1,
 			valid: true,
 			photo: "",
-			ingredients: [
-				{
-					id: 1,
-					name: "egg",
-					quantity: 1
-				},
-				{ id: 2, name: "milk", quantity: 1 },
-				{ id: 3, name: "chicken", quantity: 1 },
-				{ id: 4, name: "pork", quantity: 1 },
-				{ id: 5, name: "bread", quantity: 1 },
-				{ id: 6, name: "salat", quantity: 1 }
-			],
+			searchIngredient: "",
+			ingredients: [],
 			pickedIngredients: [],
 			recipeIngredients: [],
 			dialog: false
@@ -174,9 +169,6 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		this.fetchIngredients();
-	},
 	mixins: [validation],
 	methods: {
 		selectFile(file) {
@@ -186,6 +178,9 @@ export default {
 		remove(item) {
 			const index = this.pickedIngredients.indexOf(item.name);
 			if (index >= 0) this.pickedIngredients.splice(index, 1);
+		},
+		openIngredients() {
+			if (this.ingredients.length === 0) this.fetchIngredients();
 		},
 		close() {
 			this.dialog = false;
@@ -198,22 +193,28 @@ export default {
 			if (result.success) this.ingredients = result.data.results;
 		},
 		async save() {
-			const file = new FormData();
-
-			file.append("photo", this.photo);
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			console.log(reader);
-
+			const isValid = await this.$refs.form.validate();
+			if (isValid) {
+				var reader = new FileReader();
+				reader.readAsDataURL(this.photo);
+				var that = this;
+				reader.onloadend = function(evt) {
+					if (evt.target.readyState == FileReader.DONE) {
+						that.saveRecipe(reader.result);
+					}
+				};
+			}
+		},
+		async saveRecipe(fileByteArray) {
 			const result = await this.$recipe.addRecipe({
 				title: this.title,
 				description: this.description,
 				preparingTime: +this.time,
-				photo: file,
+				photo: fileByteArray,
 				ingredients: [
 					...this.recipeIngredients.map((item) => ({
 						ingredientId: item.id,
-						quantity: item.quantity
+						quantity: +item.quantity
 					}))
 				]
 			});

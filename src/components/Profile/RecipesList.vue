@@ -1,6 +1,6 @@
 <template>
 	<div class="d-flex flex-column justify-center">
-		<v-row class="d-flex flex-row">
+		<v-row class="d-flex flex-row" v-if="recipes.length > 0">
 			<div
 				v-for="recipe in recipes"
 				:key="recipe.id"
@@ -9,15 +9,7 @@
 				<v-card @click="openRecipe(recipe.id)">
 					<v-img
 						v-if="recipe.photo"
-						:src="
-							`https://picsum.photos/500/300?image=${recipe.id *
-								19 +
-								16}`
-						"
-						:lazy-src="
-							`https://picsum.photos/10/6?image=${recipe.id * 19 +
-								16}`
-						"
+						:src="recipe.photo"
 						aspect-ratio="1"
 						class="grey lighten-2"
 					>
@@ -77,9 +69,14 @@
 				</v-card>
 			</div>
 		</v-row>
-
+		<div class="col-12 d-flex justify-center" v-else>
+			NO DATA
+		</div>
 		<v-btn
-			v-if="pagination.currentPage !== pagination.pageCount"
+			v-if="
+				pagination.currentPage !== pagination.pageCount &&
+					recipes.length > 0
+			"
 			color="orange lighten-1"
 			text
 			@click="loadMore"
@@ -116,7 +113,7 @@ export default {
 			}
 		};
 	},
-	created() {
+	mounted() {
 		this.getRecipes();
 	},
 	watch: {

@@ -12,47 +12,57 @@
 				</v-card-title>
 				<v-card-text>
 					<v-container>
-						<v-row>
-							<v-col cols="12">
-								<h2>Wybierz płeć</h2>
-								<v-radio-group v-model="radioGroup">
-									<v-radio
-										v-for="gender in genders"
-										:key="gender"
-										:label="`${gender}`"
-										:value="gender"
-									></v-radio>
-								</v-radio-group>
-							</v-col>
-							<v-col cols="12" sm="6" md="2">
-								<v-text-field
-									label="Wiek"
-									type="number"
-									min="1"
-									v-model="age"
-									required
-								></v-text-field>
-							</v-col>
+						<v-form
+							ref="form"
+							v-model="valid"
+							lazy-validation
+							class="text-center px-4"
+						>
+							<v-row>
+								<v-col cols="12">
+									<h2>Choose geneder</h2>
+									<v-radio-group v-model="radioGroup">
+										<v-radio
+											v-for="gender in genders"
+											:key="gender"
+											:label="`${gender}`"
+											:value="gender"
+										></v-radio>
+									</v-radio-group>
+								</v-col>
+								<v-col cols="12" sm="6" md="2">
+									<v-text-field
+										:rules="[rules.required]"
+										label="Age"
+										type="number"
+										min="1"
+										v-model="age"
+										required
+									></v-text-field>
+								</v-col>
 
-							<v-col cols="12" sm="6" md="6">
-								<v-text-field
-									type="number"
-									min="1"
-									label="Wzrost"
-									v-model="height"
-									required
-								></v-text-field>
-							</v-col>
-							<v-col cols="12" sm="6" md="4">
-								<v-text-field
-									type="number"
-									min="1"
-									label="Waga"
-									v-model="weight"
-									required
-								></v-text-field>
-							</v-col>
-						</v-row>
+								<v-col cols="12" sm="6" md="6">
+									<v-text-field
+										:rules="[rules.required]"
+										type="number"
+										min="1"
+										label="Height"
+										v-model="height"
+										required
+									></v-text-field>
+								</v-col>
+								<v-col cols="12" sm="6" md="4">
+									<v-text-field
+										type="number"
+										min="1"
+										:rules="[rules.required]"
+										label="Weight"
+										v-model="weight"
+										required
+									></v-text-field>
+								</v-col>
+							</v-row>
+						</v-form>
 					</v-container>
 				</v-card-text>
 				<v-card-actions>
@@ -83,38 +93,40 @@ import validation from "../../mixins/validation";
 export default {
 	data() {
 		return {
-			weight: 100,
-			height: 100,
-			radioGroup: 1,
+			weight: "",
+			height: "",
+			radioGroup: "male",
 			age: 1,
+			valid: null,
 			dialog: false,
 			genders: ["male", "female"]
 		};
 	},
 	mixins: [validation],
 	methods: {
-		...mapActions(["setNotification"]),
-		calculate(item) {
-			console.log("test", item);
-		},
+		...mapActions(["setNotification", "setPpm"]),
 
 		close() {
 			this.dialog = false;
 		},
 		async save() {
-			const result = await this.$profile.editProfile({
-				height: this.height,
-				weight: this.weight,
-				isMale: this.radioGroup !== 1,
-				age: +this.age
-			});
-			if (result.success) {
-				this.dialog = false;
-			} else {
-				this.setNotification({
-					message: result.errors.message,
-					color: "red"
+			const isValid = await this.$refs.form.validate();
+			if (isValid) {
+				const result = await this.$profile.calculatePpm({
+					height: +this.height,
+					weight: +this.weight,
+					isMale: this.radioGroup !== 1,
+					age: +this.age
 				});
+				if (result.success) {
+					this.dialog = false;
+					this.setPpm(result.data);
+				} else {
+					this.setNotification({
+						message: result.errors.message,
+						color: "red"
+					});
+				}
 			}
 		}
 	}

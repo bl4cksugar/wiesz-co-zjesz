@@ -31,37 +31,47 @@
 						<div
 							class="col-12 col-md-4 d-flex align-center justify-center"
 						>
-							img here
+							<v-img
+								v-if="recipe.photo"
+								:src="recipe.photo"
+								aspect-ratio="1"
+								class="grey lighten-2"
+							>
+								<template v-slot:placeholder>
+									<v-row
+										class="fill-height ma-0"
+										align="center"
+										justify="center"
+									>
+										<v-progress-circular
+											indeterminate
+											color="grey lighten-5"
+										></v-progress-circular>
+									</v-row>
+								</template>
+							</v-img>
 						</div>
 						<div
-							class="col-12 col-md-8 d-flex align-center justify-space-between flex-row flex-wrap flex-md-column"
+							class="col-12 col-md-8 d-flex flex-row flex-wrap flex-md-column"
 						>
 							<div>
 								<div class="d-flex align-center">
 									<h2 style="font-family:Merriweather;">
 										{{ recipe.title }}
 									</h2>
-									<v-btn
-										:disabled="loading"
+									<edit-recipe
 										v-if="isAuthor"
-										class="ma-2"
-										@click="editRecipe()"
-										text
-										icon
-										color="warning"
-									>
-										<v-icon>fas fa-edit</v-icon>
-									</v-btn>
+										:recipe="recipe"
+									></edit-recipe>
 									<v-btn
 										:disabled="loading"
 										v-if="isAuthor || isAdmin"
-										class="ma-2"
 										@click="deleteItem()"
 										text
 										icon
 										color="red"
 									>
-										<v-icon>mdi-delete-forever</v-icon>
+										<v-icon>fas fa-times</v-icon>
 									</v-btn>
 								</div>
 								<div class="d-flex">
@@ -169,7 +179,7 @@
 							}}</v-list-item-title>
 						</v-list-item-content>
 
-						<v-row align="center" justify="end">
+						<v-row align="center" justify="end" v-if="isLogged">
 							<v-btn
 								:disabled="loading"
 								class="ma-2"
@@ -236,6 +246,7 @@
 						</v-list-item>
 					</v-list>
 					<v-textarea
+						v-if="isLogged"
 						solo
 						:rules="[rules.required]"
 						label="Type comment here..."
@@ -244,6 +255,7 @@
 					<v-btn
 						:disabled="loading"
 						@click="sendComment"
+						v-if="isLogged"
 						block
 						class="mb-5"
 						color="#3f51b5"
@@ -259,6 +271,7 @@
 <script>
 import validation from "../mixins/validation";
 import { mapGetters } from "vuex";
+import EditRecipe from "../components/Recipe/EditRecipe.vue";
 
 export default {
 	name: "Recipe",
@@ -284,6 +297,9 @@ export default {
 				}
 			]
 		};
+	},
+	components: {
+		EditRecipe
 	},
 	mounted() {
 		const { id } = this.$route.params;
@@ -399,8 +415,7 @@ export default {
 			this.$nextTick(() => {});
 		}
 	},
-	mixins: [validation],
-	components: {}
+	mixins: [validation]
 };
 </script>
 <style>

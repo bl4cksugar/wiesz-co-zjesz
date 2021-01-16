@@ -2,7 +2,7 @@ import requestSender from "../helpers/requestSender";
 
 export default function(Vue) {
 	(Vue.profile = {
-		async editProfile(request) {
+		async calculatePpm(request) {
 			const result = await requestSender.send(
 				{
 					method: "put",

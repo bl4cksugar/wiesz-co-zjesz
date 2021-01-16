@@ -2,10 +2,7 @@
 	<v-card @click="openRecipe">
 		<v-img
 			v-if="recipe.photo"
-			:src="`https://picsum.photos/500/300?image=${recipe.id * 19 + 16}`"
-			:lazy-src="
-				`https://picsum.photos/10/6?image=${recipe.id * 19 + 16}`
-			"
+			:src="recipe.photo"
 			aspect-ratio="1"
 			class="grey lighten-2"
 		>

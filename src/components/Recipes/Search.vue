@@ -46,9 +46,11 @@
 				v-model="pickedIngredients"
 				:items="ingredients"
 				chips
+				@click.native="openIngredients"
 				small-chips
 				deletable-chips
 				outlined
+				:search-input.sync="searchIngredient"
 				placeholder="Ingredients"
 				label="Find ingridients"
 				item-text="title"
@@ -77,7 +79,8 @@ export default {
 			calories: "",
 			time: "",
 			ingredients: [],
-			pickedIngredients: []
+			pickedIngredients: [],
+			searchIngredient: ""
 		};
 	},
 	mixins: [validation],
@@ -110,6 +113,9 @@ export default {
 				ingredients: []
 			});
 		},
+		openIngredients() {
+			if (this.ingredients.length === 0) this.fetchIngredients();
+		},
 		async fetchIngredients() {
 			const result = await this.$ingredient.getIngredients({
 				page: 1,
@@ -118,9 +124,6 @@ export default {
 			});
 			if (result.success) this.ingredients = result.data.results;
 		}
-	},
-	mounted() {
-		this.fetchIngredients();
 	},
 	computed: {
 		isFormFilled() {
