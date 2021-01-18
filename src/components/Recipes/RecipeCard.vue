@@ -2,7 +2,7 @@
 	<v-card @click="openRecipe">
 		<v-img
 			v-if="recipe.photo"
-			:src="`${$imgPath}/${recipe.photo}`"
+			:src="recipe.photo"
 			aspect-ratio="1"
 			class="grey lighten-2"
 		>
