@@ -51,6 +51,16 @@ export default function(Vue) {
 				request
 			);
 			return result;
+		},
+		async uploadPhoto(file) {
+			const result = await requestSender.send(
+				{
+					method: "post",
+					url: "/recipes/photo"
+				},
+				file
+			);
+			return result;
 		}
 	}),
 		Object.defineProperties(Vue.prototype, {

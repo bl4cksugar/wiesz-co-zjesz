@@ -195,22 +195,21 @@ export default {
 		async save() {
 			const isValid = await this.$refs.form.validate();
 			if (isValid) {
-				var reader = new FileReader();
-				reader.readAsDataURL(this.photo);
-				var that = this;
-				reader.onloadend = function(evt) {
-					if (evt.target.readyState == FileReader.DONE) {
-						that.saveRecipe(reader.result);
-					}
-				};
+				const formData = new FormData();
+				formData.append("photo", this.photo, this.photo.name);
+				const savedFile = await this.$recipe.uploadPhoto(formData);
+
+				if (savedFile.success) {
+					this.saveRecipe(savedFile.data);
+				}
 			}
 		},
-		async saveRecipe(fileByteArray) {
+		async saveRecipe(fileName) {
 			const result = await this.$recipe.addRecipe({
 				title: this.title,
 				description: this.description,
 				preparingTime: +this.time,
-				photo: fileByteArray,
+				photo: fileName,
 				ingredients: [
 					...this.recipeIngredients.map((item) => ({
 						ingredientId: item.id,

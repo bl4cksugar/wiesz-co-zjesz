@@ -30,6 +30,7 @@ jobs:
             - name: Npm build
               env:
                   VUE_APP_API_BASE_URL: https://wiesz-co-zjesz.herokuapp.com/api
+                  VUE_APP_API_IMAGES_URL: https://wiesz-co-zjesz.herokuapp.com/recipes
                   VUE_APP_NODE_ENV: prod
                   VUE_APP_I18N_FALLBACK_LOCALE: en
               run: npm run build

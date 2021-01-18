@@ -33,7 +33,7 @@
 						>
 							<v-img
 								v-if="recipe.photo"
-								:src="recipe.photo"
+								:src="`${$imgPath}/${recipe.photo}`"
 								aspect-ratio="1"
 								class="grey lighten-2"
 							>

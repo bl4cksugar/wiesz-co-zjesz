@@ -66,6 +66,7 @@ Vue.axios.interceptors.response.use(
 	}
 );
 
+Vue.prototype.$imgPath = process.env.VUE_APP_API_IMAGES_URL;
 Vue.config.productionTip = false;
 
 new Vue({
