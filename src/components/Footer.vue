@@ -14,13 +14,13 @@
 		</v-card-text>
 
 		<v-card-text class="white--text pt-0">
-			© 2020 wieszcozjesz.pl Wszystkie prawa zastrzeżone Kopiowanie i
-			rozpowszechnianie bez zgody wieszcozjesz zabronione
+			© 2020 wieszcozjesz.pl All rights reserved. Copying and distributed
+			without the consent of wiecozjesz is prohibited
 		</v-card-text>
 
 		<v-divider></v-divider>
 		<v-card-text class="white--text">
-			<strong>autor: Natalia Jarzmicka </strong>
+			<strong>author: Natalia Jarzmicka </strong>
 		</v-card-text>
 	</v-footer>
 </template>
