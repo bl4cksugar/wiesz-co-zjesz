@@ -45,21 +45,18 @@
 							class="d-flex justify-center align-center"
 							style="font-family:Montserrat; font-size:15px; "
 						>
-							Lorem ipsum dolor sit amet, consectetur adipiscing
-							elit. Donec egestas ligula ac sodales pulvinar.
-							Curabitur velit nisi, laoreet et sodales vitae,
-							vestibulum et velit. Nunc semper tellus sit amet
-							tempor vehicula. Maecenas porta massa et sapien
-							sollicitudin, non aliquam tortor sagittis. Sed in
-							interdum erat. Donec rutrum quam nec orci iaculis,
-							at blandit enim pulvinar. Vestibulum dapibus libero
-							quis massa volutpat suscipit mollis at metus. Morbi
-							tristique sem in eros euismod maximus. Fusce
-							venenatis nec tellus eget mattis. Donec eleifend
-							ante a sem laoreet semper. Morbi venenatis faucibus
-							leo non accumsan. Nulla velit nisi, tincidunt in
-							lacinia vitae, dictum at diam. Duis ut sapien
-							pellentesque, porta elit ac, suscipit nibh.
+							Home cooking is made with healthier eating, but the
+							obstacles may be the lack of time and cells
+							financial, lack of inspiration and / or insufficient
+							cooking knowledge. This application does the job
+							combine classic cookbooks and diet guides. The
+							application will give you the possibility of taking
+							advantage of a wide, constantly developed by users
+							of recipes but it will also provide basic assistance
+							dietary knowledge needed to compose a complete diet.
+							The main idea behind the app is promoting your home
+							at home and this place making it more efficient,
+							cheaper and less wasteful.
 						</span>
 					</div>
 				</div>
@@ -101,8 +98,6 @@ export default {
 </script>
 
 <style>
-#about {
-}
 .row {
 	align-content: center;
 	justify-content: center;
