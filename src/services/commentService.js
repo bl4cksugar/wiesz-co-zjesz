@@ -13,14 +13,11 @@ export default function(Vue) {
 			return result;
 		},
 
-		async deleteComment(request) {
-			const result = await requestSender.send(
-				{
-					method: "delete",
-					url: `/comments/{id}`
-				},
-				request
-			);
+		async deleteComment(id) {
+			const result = await requestSender.send({
+				method: "delete",
+				url: `/comments/${id}`
+			});
 			return result;
 		}
 	}),

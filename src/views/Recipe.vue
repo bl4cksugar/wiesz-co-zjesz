@@ -3,7 +3,7 @@
 		id="recipe"
 		class="profile-page d-flex justify-center align-center flex-column"
 	>
-		<div class="d-flex col-12 col-md-8 flex-column flex-md-row">
+		<div class="d-flex col-10 col-md-6 flex-column flex-md-row">
 			<v-dialog v-model="dialogDelete" max-width="500px">
 				<v-card>
 					<v-card-title class="headline"
@@ -55,24 +55,28 @@
 							class="col-12 col-md-8 d-flex flex-row flex-wrap flex-md-column"
 						>
 							<div>
-								<div class="d-flex align-center">
+								<div class="d-flex justify-space-between ml-5">
 									<h2 style="font-family:Merriweather;">
 										{{ recipe.title }}
 									</h2>
-									<edit-recipe
-										v-if="isAuthor"
-										:recipe="recipe"
-									></edit-recipe>
-									<v-btn
-										:disabled="loading"
-										v-if="isAuthor || isAdmin"
-										@click="deleteItem()"
-										text
-										icon
-										color="red"
-									>
-										<v-icon>fas fa-times</v-icon>
-									</v-btn>
+
+									<div class="d-flex align-center  ">
+										<edit-recipe
+											style="justify-end"
+											v-if="isAuthor"
+											:recipe="recipe"
+										></edit-recipe>
+										<v-btn
+											:disabled="loading"
+											v-if="isAuthor || isAdmin"
+											@click="deleteItem()"
+											text
+											icon
+											color="red"
+										>
+											<v-icon>fas fa-times</v-icon>
+										</v-btn>
+									</div>
 								</div>
 								<div class="d-flex">
 									<v-rating
@@ -97,6 +101,7 @@
 										length="5"
 										size="32"
 									></v-rating>
+
 									<v-btn
 										:disabled="loading"
 										v-if="!canJudge && isLogged"
@@ -109,63 +114,64 @@
 										<v-icon>mdi-delete-forever</v-icon>
 									</v-btn>
 								</div>
+
 								<small
-									class="text--secondary"
+									class="text--secondary text-uppercase d-flex ml-5"
 									style="font-family:Montserrat; "
 								>
-									<p>
+									<p class="mr-5">
 										{{
 											`${overall ? overall : 0} (${
 												recipe.grades.length
 											})`
 										}}
 									</p>
-								</small>
-								<small
-									class="text--secondary text-uppercase"
-									style="font-family:Montserrat; "
-								>
-									<p class="mb-1">
+
+									<p class="mb-1 mr-5">
 										{{ `${recipe.calories} kcal` }}
 									</p>
+
 									<p>
 										{{ `${recipe.preparingTime} minutes` }}
 									</p>
 								</small>
+								<v-list class="pt-0">
+									<v-list-item class="grow">
+										<v-list-item-content class="pb-0">
+											<v-list-item-title>
+												Ingredients:
+											</v-list-item-title>
+										</v-list-item-content>
+									</v-list-item>
+									<v-list-item
+										class="text--secondary "
+										style="font-family:Montserrat; "
+										dense
+										v-for="ingredient in recipe.ingredients"
+										:key="ingredient.id"
+									>
+										<v-list-item-content>
+											<v-list-item-title>
+												{{
+													`- ${ingredient.ingredient.title}: ${ingredient.quantity}` +
+														"  g"
+												}}
+											</v-list-item-title>
+										</v-list-item-content>
+									</v-list-item></v-list
+								>
 							</div>
 						</div>
 					</div>
+					<v-divider></v-divider>
 					<div class="col-12">
-						<v-list-item class="grow">
-							<v-list-item-content class="pb-0">
-								<v-list-item-title>
-									Ingredients:
-								</v-list-item-title>
-							</v-list-item-content>
-						</v-list-item>
-						<v-list class="pt-0">
-							<v-list-item
-								dense
-								v-for="ingredient in recipe.ingredients"
-								:key="ingredient.id"
-							>
-								<v-list-item-content>
-									<v-list-item-title>
-										{{
-											`- ${ingredient.ingredient.title}: ${ingredient.quantity}`
-										}}
-									</v-list-item-title>
-								</v-list-item-content>
-							</v-list-item>
-						</v-list>
 						<v-list-item class="grow">
 							<v-list-item-content class="py-0">
 								<v-list-item-title>
 									Description:
 								</v-list-item-title>
-								<small class="pt-4">
-									{{ recipe.description }}
-								</small>
+
+								{{ recipe.description }}
 							</v-list-item-content>
 						</v-list-item>
 					</div>
@@ -212,14 +218,31 @@
 							<v-list-item-content>
 								<v-list-item-title>
 									<div
-										class="d-flex justify-space-between flex-column flex-md-row"
+										class="d-flex justify-space-between flex-column flex-md-row flex-wrap"
 									>
+										<div class="col-12 d-flex justify-end">
+											<v-btn
+												text
+												x-small
+												@click="
+													deleteComment(comment.id)
+												"
+												v-if="
+													isAdmin ||
+														comment.author.id ===
+															getUserId
+												"
+											>
+												x</v-btn
+											>
+										</div>
+
 										<div class="col-8 text-wrap">
 											{{
 												comment.author.profile.nickname
 											}}
 										</div>
-										<div class="col-4">
+										<div class="col-4 d-flex justify-end">
 											<small>{{
 												new Date(
 													new Date(
@@ -260,7 +283,7 @@
 						class="mb-5"
 						color="#3f51b5"
 						dark
-						>Send</v-btn
+						>COMMENT</v-btn
 					>
 				</div>
 			</v-card>
@@ -401,6 +424,10 @@ export default {
 		},
 		deleteItem() {
 			this.dialogDelete = true;
+		},
+		async deleteComment(id) {
+			const result = await this.$comment.deleteComment(id);
+			if (result.success) this.getRecipe(this.recipe.id);
 		},
 
 		async deleteItemConfirm() {

@@ -15,7 +15,7 @@
 
 		<v-card-text class="white--text pt-0">
 			© 2020 wieszcozjesz.pl All rights reserved. Copying and distributed
-			without the consent of wiecozjesz is prohibited
+			without the consent of wieszcozjesz is prohibited
 		</v-card-text>
 
 		<v-divider></v-divider>

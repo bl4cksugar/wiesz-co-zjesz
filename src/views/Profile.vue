@@ -27,7 +27,6 @@
 				</div>
 				<div class="d-flex flex-column flex-md-row">
 					<ppm class="mx-2"></ppm>
-					<delete-modal class="mx-2"></delete-modal>
 				</div>
 			</div>
 		</div>
@@ -70,7 +69,7 @@
 <script>
 import Ppm from "../components/Profile/Ppm";
 import RecipesList from "../components/Profile/RecipesList";
-import DeleteModal from "../components/Profile/DeleteModal.vue";
+
 import { mapGetters } from "vuex";
 
 export default {
@@ -106,12 +105,11 @@ export default {
 		this.config = this.titles[0].config;
 	},
 	computed: {
-		...mapGetters(["user"])
+		...mapGetters(["user", "isAdmin"])
 	},
 	components: {
 		RecipesList,
-		Ppm,
-		DeleteModal
+		Ppm
 	}
 };
 </script>

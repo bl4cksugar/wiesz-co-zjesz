@@ -15,7 +15,7 @@
 					<v-btn color="blue darken-1" text @click="dialog = false">
 						No
 					</v-btn>
-					<v-btn color="error" text @click="dialog = false">
+					<v-btn color="error" text @click="deleteAcc">
 						Yes
 					</v-btn>
 				</v-card-actions>
@@ -24,15 +24,29 @@
 	</div>
 </template>
 
-//
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
 	data() {
 		return {
 			dialog: false
 		};
 	},
-	methods: {}
+	computed: {
+		...mapGetters(["isAdmin", "user", "getUserId"])
+	},
+	methods: {
+		...mapActions(["destroySession"]),
+		async deleteAcc() {
+			const result = await this.$user.deleteUser(this.getUserId);
+			console.log(result);
+			if (result.success) {
+				this.dialog = false;
+				this.$router.push({ name: "Home" });
+				if (!this.isAdmin) this.destroySession();
+			}
+		}
+	}
 };
 </script>
 <style scoped></style>
